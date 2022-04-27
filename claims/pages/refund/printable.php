@@ -106,6 +106,26 @@
                 <td>Approval Status:</td>
                 <td><?php echo (isset($header['approval']) && $header['approval'] == 1 ? "Approved": "Not yet Approved"); ?></td>
             </tr>
+            <tr>
+            <td>HOD Approval Status:</td>
+            <td>
+                <?php if(isset($header['hodrequired']) && $header['hodrequired'] == 1){
+                    echo (isset($header['is_hod']) && $header['is_hod'] == 0 ? "Approved": "Not yet Approved"); 
+                }else{
+                    echo "Not Applicable";
+                }
+                ?>
+            </td>
+            <td>BCC Approval Status:</td>
+            <td>
+                <?php if(isset($header['bcc']) && $header['bcc'] != 0){
+                    echo (isset($header['is_bcc']) && $header['is_bcc'] == 0 ? "Approved": "Not yet Approved"); 
+                }else{
+                    echo "Not Applicable";
+                }
+                ?>
+            </td>
+            </tr>
         </table>
     </div>
 </div>

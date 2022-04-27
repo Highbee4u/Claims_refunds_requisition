@@ -52,8 +52,8 @@
                                                 <th>&nbsp;</th>
                                                 <th>Claim. No</th>
                                                 <th>Initiated. By</th>
-                                                <th>Hospt. No</th>
-                                                <th>Patient Name</th>
+                                                <th>Staff. No</th>
+                                                <!-- <th>Patient Name</th> -->
                                                 <th>Payee Name</th>
                                                 <th>Return Status</th>
                                                 <th>Hr Status</th>
@@ -86,8 +86,7 @@
                                                 </td>
                                                 <td><?php echo $dt['id']; ?></td>
                                                 <td><?php echo isset($dt['Enteredby']) ? $user->get_user_name_by_email($dt['Enteredby']) : ""; ?></td>
-                                                <td><?php echo isset($dt['hospital_no']) && $dt['hospital_no'] != '0' ? ($dt['hospital_no'] == "" ? "<span class='bg-danger' style = 'color: white'>Not Applicable</span>" : $dt['hospital_no']) : "---"; ?></td>
-                                                <td><?php echo isset($dt['Patient_name']) && $dt['Patient_name'] != "" ? $dt['Patient_name'] : "<span class='bg-danger' style = 'color: white'>Not Applicable</span>"; ?></td>
+                                                <td><?php echo isset($dt['hospital_no']) && $dt['hospital_no'] != "" ? $dt['hospital_no'] : "<span class='bg-danger' style = 'color: white'>Not Applicable</span>"; ?></td>
                                                 <td><?php echo isset($dt['Payee']) && $dt['Payee'] !="" ? $dt['Payee'] : "<span class='bg-danger' style = 'color: white'>Not Applicable</span>"; ?></td>
                                                 <td><?php echo isset($dt['returned']) && $dt['returned'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span>" : '---------'; ?></td>
                                                 <td>
@@ -189,12 +188,12 @@
                 <label for="exampleInputEmail1" id="lblPayeename">Payees Name:</label>
                 <input type="text" name="payee" class="form-control" id="payee" required ></textarea>
                 <span id="payeeerror"></span>
-                <label for="exampleInputEmail1" id="lblhospitalno">Hospital Number (If Applicable):</label>
+                <label for="exampleInputEmail1" id="lblhospitalno">Staff Number (If Applicable):</label>
                 <input type="text" name="hospitalno" class="form-control" id="hospitalno"></textarea>
                 <span id="hospitalnoerror"></span>
-                <label for="exampleInputEmail1" id="lblpatientsname">Patients Name (If Applicable):</label>
+                <!-- <label for="exampleInputEmail1" id="lblpatientsname">Patients Name (If Applicable):</label>
                 <input type="text" name="patientname" class="form-control" id="patientname"></textarea>
-                <span id="patientnameerror"></span>
+                <span id="patientnameerror"></span> -->
                 <label for="exampleInputEmail1">Account No (If Applicable):</label>
                 <input type="text" name="account_number" class="form-control" id="account_number" ></textarea>
                 <span id="accountnumbererror"></span>
@@ -332,7 +331,7 @@
     var enteredby = $('#enteredby').val();
     var auditedby = $('#auditedby').val();
     var hospitalno = $('#hospitalno').val();
-    var patientname = $('#patientname').val();
+    // var patientname = $('#patientname').val();
     var department = $('#departmentid').val();
     var payee = $('#payee').val();
     var claimscategory = $('#claimscategory').val();
@@ -387,7 +386,7 @@
                 'Enteredby': enteredby, 
                 'departmentid':department,
                 'hospital_no': hospitalno, 
-                'Patient_name':patientname, 
+                // 'Patient_name':patientname, 
                 'Payee': payee, 
                 'Auditedby':auditedby, 
                 'hrrequired': hrrequired,

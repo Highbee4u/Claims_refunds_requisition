@@ -59,14 +59,8 @@
                                           <td><?php echo isset($header['Auditedby']) && !empty($header['Auditedby']) ? $user->get_user_name_by_id($header['Auditedby']) : ""; ?></td>
                                       </tr>
                                       <tr>
-                                          <td>Patient Name:</td>
-                                          <td><?php echo isset($header['Patient_name']) && $header['Patient_name'] != NULL  ? $header['Patient_name'] : "Not Applicable"; ?></td>
                                           <td>Payee Name:</td>
                                           <td><?php echo isset($header['Payee']) && $header['Payee'] != NULL ? $header['Payee'] : "Not Applicable"; ?></td>
-                                      </tr>
-                                      <tr>
-                                          <td>Total Amount:</td>
-                                          <td><?php echo isset($header['Amount']) ? $header['Amount'] : ""; ?></td>
                                           <td>Creation Date:</td>
                                           <td><?php echo isset($header['Created_date']) ? $header['Created_date'] : ""; ?></td>
                                       </tr>
@@ -75,12 +69,16 @@
                                           <td><?php echo isset($header['bank_name']) && $header['bank_name'] != NULL  ? $header['bank_name'] : "Not Applicable"; ?></td>
                                           <td>Account Name:</td>
                                           <td><?php echo isset($header['account_name']) && $header['account_name'] != NULL ? $header['account_name'] : "Not Applicable"; ?></td>
+                                         
+                                          
                                       </tr>
                                       <tr>
                                           <td>Account Number:</td>
-                                          <td colspan="3"><?php echo isset($header['account_number']) && $header['account_number'] != NULL  ? $header['account_number'] : "Not Applicable"; ?></td>
-              
+                                          <td><?php echo isset($header['account_number']) && $header['account_number'] != NULL  ? $header['account_number'] : "Not Applicable"; ?></td>
+                                          <td>Total Amount:</td>
+                                          <td><?php echo isset($header['Amount']) ? $header['Amount'] : ""; ?></td>
                                       </tr>
+                                      
                                       
                                       <?php if(isset($header['returned']) && $header['returned'] == 1){ ?>
                                         <tr>

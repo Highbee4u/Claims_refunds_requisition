@@ -94,7 +94,7 @@
                                                 ?>
                                                     <tr>
                                                     <td>
-                                                    <a href="/requisitionclaims/pages/requisition/view.php?id=<?php echo $dt['reqnumber']; ?>"><i class="fa fa-eye"></i></i></a>
+                                                    <a href="view.php?id=<?php echo $dt['reqnumber']; ?>"><i class="fa fa-eye"></i></i></a>
                                                         <?php echo ($dt['approvalRequest'] == 1  ? "<a href='printable.php?id=".$dt['reqnumber']."'><i class='fa fa-print'></i></i></a>" : ''); ?>
                                                     </td>
                                                     <td><?php echo $dt['reqnumber']; ?></td>
