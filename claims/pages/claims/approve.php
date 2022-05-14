@@ -47,11 +47,13 @@
                                         <tr>
                                             <th>&nbsp;</th>
                                             <th>Claim. No</th>
+                                            <th>Category</th>
                                             <th>Initiated. By</th>
                                             <th>Amount</th>
                                             <th>Auditor Status</th>
                                             <th>MD Status</th>
                                             <th>Paymt. Status</th>
+                                            <th>Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -66,6 +68,7 @@
                                                     <a href="printable.php?id=<?php echo $dt['id']; ?>"><i class="fa fa-print"></i></a>
                                                 </td>
                                                 <td><?php echo $dt['id']; ?></td>
+                                                <td><?php echo isset($dt['claim_categoryid']) ? $claim->get_category_name_by_id($dt['claim_categoryid']) : ""; ?></td>
                                                 <td><?php echo isset($dt['Enteredby']) ? $user->get_user_name_by_email($dt['Enteredby']) : ""; ?></td>
                                                 <td><?php echo isset($dt['Amount']) && $dt['Amount'] !="" ? $dt['Amount'] : "--------------"; ?></td>
                                                 <td><?php if($dt['Audited'] == 0 ){ 
@@ -86,6 +89,7 @@
                                                     echo '<span class="bg-success" style = "color: white">Approved</span>'; 
                                                     } ?>
                                                 </td>
+                                                <td><?php echo isset($dt['Created_date']) ? $dt['Created_date'] : "" ?></td>
                                                 </tr>
                                             <?php } } else { ?>
                                                 <tr>

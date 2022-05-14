@@ -72,8 +72,8 @@
                                                 <th>&nbsp;</th>
                                                 <th>Claim. No</th>
                                                 <th>Initiated. By</th>
-                                                <th>Hospt. No</th>
-                                                <th>Patient Name</th>
+                                                <th>Staff. No</th>
+                                                <th>Category</th>
                                                 <th>Payee Name</th>
                                                 <th>HR Status</th>
                                                 <th>Auditor Status</th>
@@ -81,6 +81,7 @@
                                                
                                                 <th>Paymt. Status</th>
                                                 <th>Paymt. Date</th>
+                                                <th>Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -101,7 +102,7 @@
                                         <td><?php echo $dt['id']; ?></td>
                                         <td><?php echo isset($dt['Enteredby']) ? $user->get_user_name_by_email($dt['Enteredby']) : ""; ?></td>
                                         <td><?php echo isset($dt['hospital_no']) && $dt['hospital_no'] != '0' ? $dt['hospital_no'] : "---"; ?></td>
-                                        <td><?php echo $dt['Patient_name']; ?></td>
+                                        <td><?php echo isset($dt['claim_categoryid']) ? $claim->get_category_name_by_id($dt['claim_categoryid']) : ""; ?></td>
                                         <td><?php echo isset($dt['Payee']) && $dt['Payee'] !="" ? $dt['Payee'] : "--------------"; ?></td>
                                         <td>
                                             <?php if($dt['hrrequired'] == 1){ ?>
@@ -148,6 +149,7 @@
                                                     echo $dt['payment_date']; 
                                             } ?>
                                         </td>
+                                        <td><?php echo isset($dt['Created_date']) ? $dt['Created_date'] : "" ?></td>
                                     </tr>
                                 <?php } ?>
                                             <?php } else { ?>

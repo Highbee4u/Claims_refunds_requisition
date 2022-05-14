@@ -166,6 +166,8 @@
                   <option value="3">Procurement</option>
                   <option value="4">Accountant</option>
                   <option value="5">HR</option>
+                  <option value="7">BCC</option>
+                  <option value="8">HOD</option>
                 </select>
                 <span id="userroleerror"></span>
                 <label for="exampleInputEmail1">Department:</label>

@@ -42,7 +42,10 @@
                     <td>Department:</td>
                     <td><?php echo isset($header['departmentid']) && $header['departmentid'] != 0 ? $department->get_depart_name_by_id($header['departmentid']) : ""; ?></td>
                     <td>Description:</td>
-                    <td><?php echo isset($header['description']) && $header['description'] != 0 ? $user->get_user_name_by_id($header['description']) : ""; ?></td>
+                    
+
+                    <td><?php echo isset($header['description']) ? $header['description'] : ""; ?></td>
+
                 </tr>
                 <tr>
                     <td>Requisited By:</td>

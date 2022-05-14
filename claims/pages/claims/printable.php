@@ -30,13 +30,13 @@
             <tr>
                 <td>Claim ID</td>
                 <td><?php echo isset($_GET['id']) ? $_GET['id'] : ""; ?></td>
-                <td>Hospital Number:</td>
+                <td>Staff Number:</td>
                 <td><?php echo isset($header['hospital_no']) && $header['hospital_no'] != NULL ? $header['hospital_no'] : "Not Applicable"; ?></td>
             </tr>
             <tr>
                 <td>Initiated By:</td>
                 <td><?php echo isset($header['Enteredby']) ? $user->get_user_name_by_email($header['Enteredby']) : "" ?></td>
-                <td>To be Audited By:</td>
+                <td>Audited By:</td>
                 <td><?php echo isset($header['Auditedby']) && !empty($header['Auditedby']) ? $user->get_user_name_by_id($header['Auditedby']) : ""; ?></td>
             </tr>
             <tr>
@@ -60,6 +60,10 @@
                 <td><?php echo isset($header['Amount']) ? $header['Amount'] : ""; ?></td>
             </tr>
             
+            <tr>
+            <td>Approved By:</td>
+            <td> <?php echo isset($header['Approvedby']) && !empty($header['Approvedby']) ? $user->get_user_name_by_id($header['Approvedby']) : ""; ?></td>
+            </tr>
             
             <?php if(isset($header['returned']) && $header['returned'] == 1){ ?>
             <tr>
@@ -117,11 +121,35 @@
         <table class="table table-bordered">
             <tr>
                 <td><strong>Audit Status:</strong></td>
-                <td><?php echo (isset($header['audited']) && $header['audited'] == 1 ? "Audited": "Audited"); ?></td>
+                <td> <?php 
+                        if($header['returned'] == 1){
+                            echo '------------'; 
+                        }else{
+                            if($header['Audited'] == 0 ){ 
+                                echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
+                            } else { 
+                                echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                            }
+                        }
+                        ?>
+                </td>
             </tr>
             <tr>
                 <td><strong>Approval Status:</strong></td>
-                <td><?php echo (isset($header['approved']) && $header['approved'] == 1 ? "Approved": "Approved"); ?></td>
+                <td>
+                    <?php 
+                        if($header['returned'] == 1){
+                            echo '------------'; 
+                        }else{
+                            if($header['Approved'] == 0){ 
+                                echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
+                            } else if($header['Approved'] == 1 ){ 
+                            echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                            }
+                        }
+                    ?>
+                </td>
+                                            
             </tr>
         </table>
     </div>

@@ -61,7 +61,7 @@ class Refund {
 
         $con = connection::getConnection();
 
-        $sql = "SELECT * FROM $this->table";
+        $sql = "SELECT * FROM $this->table ORDER BY id DESC";
 
         $result = $con->query($sql);
 

@@ -53,6 +53,8 @@
                                             <th>Auditor Status</th>
                                             <th>MD Status</th>
                                             <th>Paymt. Status</th>
+                                            <th>Date</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -89,6 +91,7 @@
                                                     echo '<span class="bg-success" style = "color: white">Approved</span>'; 
                                                     } ?>
                                                 </td>
+                                                <td><?php echo isset($dt['Created_date']) ? $dt['Created_date'] : "" ?></td>
                                                 </tr>
                                             <?php } } else { ?>
                                                 <tr>

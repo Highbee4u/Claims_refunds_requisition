@@ -52,7 +52,7 @@ class Claim {
 
         $con = connection::getConnection();
 
-        $sql = "SELECT * FROM $this->table";
+        $sql = "SELECT * FROM $this->table ORDER BY id desc";
 
         $result = $con->query($sql);
 
@@ -304,10 +304,25 @@ class Claim {
         $cleaneddata = $this->sanitize($data);
 
         $query = "UPDATE `$this->table` SET `comment` = '".$cleaneddata['description']."', `Audited` = 0, `Approved` = 0, `approvalRequest` = 0, `returned` = 1 WHERE id='".$cleaneddata['id']."'";
-        return $query;
+        
         $result = $con->query($query);
 
         return $result ? true : false;
+    }
+
+    public function get_category_name_by_id($id){
+        $name = "";
+
+        
+        $con = connection::getConnection();
+        $query = "SELECT name FROM claims_category WHERE id ='".$id."'";
+        
+        $result = $con->query($query);
+        if($result){
+            $name = $result->fetch_assoc()['name'];
+        }
+
+        return $name;
     }
     
 }

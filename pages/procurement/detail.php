@@ -159,7 +159,7 @@
                 <input type="number"  name="qty" class="form-control" required id="qty" >
                 <span id="qtyerror"></span>
                 <label for="exampleInputEmail1">Price:</label>
-                <input type="number" name="price" required class="form-control" id="price" >
+                <input type="number" name="price" step=".01" required class="form-control" id="price" >
                 <span id="priceerror"></span>
             </div>
             

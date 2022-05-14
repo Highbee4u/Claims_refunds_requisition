@@ -77,7 +77,7 @@
                                             ?>
                                             <tr>
                                                 <td>
-                                                    <?php if($dt['audited'] == 0) { ?>
+                                                    <?php if($dt['approvalRequest'] == 0) { ?>
                                                         <a href="detail.php?id=<?php echo $dt['id']; ?>"><i class='fa fa-edit'></i></a>
                                                         <a onclick ="delete_refund('<?php echo $dt['id']; ?>')"><i class='fa fa-trash'></i></a>
                                                     <?php } else{ ?>  

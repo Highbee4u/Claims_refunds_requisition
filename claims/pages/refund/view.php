@@ -55,7 +55,7 @@
                                       <tr>
                                           <td>Initiated By:</td>
                                           <td><?php echo isset($header['enteredby']) ? $user->get_user_name_by_email($header['enteredby']) : "" ?></td>
-                                          <td>To be Audited By:</td>
+                                          <td>Audited By:</td>
                                           <td><?php echo isset($header['auditedby']) ? $user->get_user_name_by_id($header['auditedby']) : ""; ?></td>
                                       </tr>
                                       <tr>
@@ -67,14 +67,20 @@
                                       <tr>
                                           <td>Account Number:</td>
                                           <td><?php echo isset($header['account_number']) ? $header['account_number'] : ""; ?></td>
-                                          <td>To be Approved By:</td>
+                                          <td>Approved By:</td>
                                           <td><?php echo isset($header['approvedby']) ? $user->get_user_name_by_id($header['approvedby']) : ""; ?></td>
+                                      </tr>
+
+                                      <tr>
+                                      <td>Bank Name:</td>
+                                          <td><?php echo isset($header['bank_name']) ? $header['bank_name'] : ""; ?></td>
+                                      <td>Payment Status:</td>
+                                          <td><?php echo isset($header['accountant_status']) && $header['accountant_status'] == 1 ? 'Approved' : "Pending"; ?></td>
                                       </tr>
                                       <tr>
                                           <td>Total Amount:</td>
                                           <td><?php echo isset($header['amount']) ? $header['amount'] : ""; ?></td>
-                                          <td>Paymen Status:</td>
-                                          <td><?php echo isset($header['accountant_status']) && $header['accountant_status'] == 1 ? 'Approved' : "Pending"; ?></td>
+                                          
                                       </tr>
                                       <?php if(isset($header['returned']) && $header['returned'] == 1){ ?>
                                         <tr>
@@ -133,6 +139,50 @@
                                             <?php } ?>
                                         </tbody>
                                     </table>
+
+                                    
+
+                                    <div class="col-md-12 mt-5">
+        <table class="table table-bordered">
+            <tr>
+                <td>Audit Status:</td>
+                <td><?php echo (isset($header['audited']) && $header['audited'] == 1 ? "Audited": "Not yet Audited"); ?></td>
+            </tr>
+            <tr>
+                <td>Approval Status:</td>
+                <td><?php echo (isset($header['approval']) && $header['approval'] == 1 ? "Approved": "Not yet Approved"); ?></td>
+            </tr>
+            <tr>
+            <td>HOD Approval Status:</td>
+            <td>
+                <?php if(isset($header['hodrequired']) && $header['hodrequired'] == 1){
+                    echo (isset($header['is_hod']) && $header['is_hod'] == 0 ? "Approved": "Not yet Approved"); 
+                }else{
+                    echo "Not Applicable";
+                }
+                ?>
+            </td>
+            </tr>
+
+            <tr>
+            <td>BCC Approval Status:</td>
+            <td>
+                <?php if(isset($header['bcc']) && $header['bcc'] != 0){
+                    echo (isset($header['is_bcc']) && $header['is_bcc'] == 0 ? "Approved": "Not yet Approved"); 
+                }else{
+                    echo "Not Applicable";
+                }
+                ?>
+            </td>
+            </tr>
+        </table>
+    </div>
+
+
+
+
+
+
                                     <div>
                                       <?php if((!empty($header))  && ( $header['audited'] == 1 || $header['approval'] == 1)) { ?>
                                           <span class="btn btn-success dissabled">Approved</span>

@@ -49,7 +49,7 @@
                                       <tr>
                                           <td>Claim ID</td>
                                           <td><?php echo isset($_GET['id']) ? $_GET['id'] : ""; ?></td>
-                                          <td>Hospital Number:</td>
+                                          <td>Staff Number:</td>
                                           <td><?php echo isset($header['hospital_no']) ? $header['hospital_no'] : ""; ?></td>
                                       </tr>
                                       <tr>
@@ -59,17 +59,36 @@
                                           <td><?php echo isset($header['Auditedby']) ? $user->get_user_name_by_id($header['Auditedby']) : ""; ?></td>
                                       </tr>
                                       <tr>
-                                          <td>Patient Name:</td>
-                                          <td><?php echo isset($header['Patient_name']) ? $header['Patient_name'] : ""; ?></td>
+                                          
                                           <td>Payee Name:</td>
                                           <td><?php echo isset($header['Payee']) ? $header['Payee'] : ""; ?></td>
+
+                                          <td>Bank Name:</td>
+                                            <td><?php echo isset($header['bank_name']) && $header['bank_name'] != NULL  ? $header['bank_name'] : "Not Applicable"; ?></td>
                                       </tr>
+
+                                      <tr>
+                                          
+                                            <td>Account Name:</td>
+                                            <td><?php echo isset($header['account_name']) && $header['account_name'] != NULL ? $header['account_name'] : "Not Applicable"; ?></td>
+
+                                            <td>Account Number:</td>
+                                            <td><?php echo isset($header['account_number']) && $header['account_number'] != NULL  ? $header['account_number'] : "Not Applicable"; ?></td>
+                                        </tr>
+                                        <tr>
+                                           
+                                            <td>Approved By:</td>
+                                            <td> <?php echo isset($header['Approvedby']) && !empty($header['Approvedby']) ? $user->get_user_name_by_id($header['Approvedby']) : ""; ?></td>
+
+                                            <td>Creation Date:</td>
+                                          <td><?php echo isset($header['Created_date']) ? $header['Created_date'] : ""; ?></td>
+
+                                        </tr>
                                     
                                       <tr>
                                           <td>Total Amount:</td>
                                           <td><?php echo isset($header['Amount']) ? $header['Amount'] : ""; ?></td>
-                                          <td>Creation Date:</td>
-                                          <td><?php echo isset($header['Created_date']) ? $header['Created_date'] : ""; ?></td>
+                                         
                                       </tr>
                                     </table>
                                     <hr>

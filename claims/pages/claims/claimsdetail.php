@@ -198,7 +198,7 @@
             <div class="form-group">
               <input type="hidden" name="claimid" id="claimid" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
                 <label for="exampleInputEmail1">Amount:</label>
-                <input type="number" name="Amount" id="Amount" class="form-control" >
+                <input type="number" step=".01" name="Amount" id="Amount" step="0.1" class="form-control" >
                 <span id="Amounterror"></span>
                 <label for="exampleInputEmail1">Description:</label>
                 <textarea name="Description" class="form-control" id="Description"></textarea>
@@ -231,7 +231,7 @@
               <input type="hidden" name="eclaimid" id="eclaimid" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
               <input type="hidden" name="edetailid" id="edetailid" >
                 <label for="exampleInputEmail1">Amount:</label>
-                <input type="number" name="eAmount" id="eAmount" class="form-control" >
+                <input type="number" step=".01" name="eAmount" id="eAmount" class="form-control" >
                 <span id="eAmounterror"></span>
                 <label for="exampleInputEmail1">Description:</label>
                 <textarea name="eDescription" class="form-control" id="eDescription"></textarea>
@@ -432,7 +432,7 @@
           var data = {'Amount': Amount, 'Description':Description, 'claim_id':claim_id, 'id': detailid }
           // console.log(data);
           $.ajax({
-              url: "../../../library/request.php?action=update_claim_detail",
+              url: "../../../library/request.php?action=returnclaim",
               type: 'POST',
               data: data,
               dataType: 'JSON',

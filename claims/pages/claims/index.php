@@ -53,13 +53,14 @@
                                                 <th>Claim. No</th>
                                                 <th>Initiated. By</th>
                                                 <th>Staff. No</th>
-                                                <!-- <th>Patient Name</th> -->
+                                                <th>Category</th>
                                                 <th>Payee Name</th>
                                                 <th>Return Status</th>
                                                 <th>Hr Status</th>
                                                 <th>Auditor Status</th>
                                                 <th>MD Status</th>
                                                 <th>Paymt. Status</th>
+                                                <th>Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -75,7 +76,7 @@
                                             ?>
                                                 <tr>
                                                 <td>
-                                                    <?php if($dt['Audited'] == 0) { ?>
+                                                    <?php if($dt['approvalRequest'] == 0) { ?>
                                                         <a href="claimsdetail.php?id=<?php echo $dt['id']; ?>"><i class='fa fa-edit'></i></a>
                                                         <a onclick ="delete_claims('<?php echo $dt['id']; ?>')"><i class='fa fa-trash'></i></a>
                                                     <?php } else{ ?>  
@@ -87,6 +88,7 @@
                                                 <td><?php echo $dt['id']; ?></td>
                                                 <td><?php echo isset($dt['Enteredby']) ? $user->get_user_name_by_email($dt['Enteredby']) : ""; ?></td>
                                                 <td><?php echo isset($dt['hospital_no']) && $dt['hospital_no'] != "" ? $dt['hospital_no'] : "<span class='bg-danger' style = 'color: white'>Not Applicable</span>"; ?></td>
+                                                <td><?php echo isset($dt['claim_categoryid']) ? $claim->get_category_name_by_id($dt['claim_categoryid']) : ""; ?></td>
                                                 <td><?php echo isset($dt['Payee']) && $dt['Payee'] !="" ? $dt['Payee'] : "<span class='bg-danger' style = 'color: white'>Not Applicable</span>"; ?></td>
                                                 <td><?php echo isset($dt['returned']) && $dt['returned'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span>" : '---------'; ?></td>
                                                 <td>
@@ -141,6 +143,7 @@
                                                         }
                                                     ?>
                                                 </td>
+                                                <td><?php echo isset($dt['Created_date']) ? $dt['Created_date'] : "" ?></td>
                                                 </tr>
                                             <?php } } else { ?>
                                                 <tr>
@@ -222,7 +225,7 @@
                 </div>
 
                 <label for="lblstaffname" id="lblclaimscat">Claims Category Name:</label>
-                <select name="claimscategory" id="claimscategory" class="form-control" ></select>
+                <select name="claimscategory" id="claimscategory" class="form-control js-example-basic-single" ></select>
                 <span id="claimscategoryerror"></span>
             </div>
             

@@ -202,7 +202,7 @@
             <div class="form-group">
               <input type="hidden" name="id" id="id" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
                 <label for="exampleInputEmail1">Amount:</label>
-                <input type="number" class="form-control" name="Amount" id="Amount">
+                <input type="number" step=".01" class="form-control" name="Amount" id="Amount">
                 <span id="Amounterror"></span>
                 <label for="exampleInputEmail1">Description:</label>
                 <textarea name="Description" class="form-control" id="Description"></textarea>

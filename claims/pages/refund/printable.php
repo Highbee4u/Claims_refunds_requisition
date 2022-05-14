@@ -48,11 +48,18 @@
             <td>Approved By:</td>
             <td><?php echo isset($header['approvedby']) ? $user->get_user_name_by_id($header['approvedby']) : ""; ?></td>
         </tr>
+
+        <tr>
+            <td>Bank Name:</td>
+            <td><?php echo isset($header['bank_name']) ? $header['bank_name'] : ""; ?></td>
+            <td>Payment Status:</td>
+            <td><?php echo isset($header['accountant_status']) && $header['accountant_status'] == 1 ? 'Approved' : "Pending"; ?></td>
+            </tr>
+
         <tr>
             <td>Total Amount:</td>
             <td><?php echo isset($header['amount']) ? $header['amount'] : ""; ?></td>
-            <td>Paymen Status:</td>
-            <td><?php echo isset($header['accountant_status']) && $header['accountant_status'] == 1 ? 'Approved' : "Pending"; ?></td>
+           
         </tr>
       </table>
       <hr>
@@ -116,6 +123,9 @@
                 }
                 ?>
             </td>
+            </tr>
+
+            <tr>
             <td>BCC Approval Status:</td>
             <td>
                 <?php if(isset($header['bcc']) && $header['bcc'] != 0){
