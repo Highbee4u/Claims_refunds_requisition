@@ -43,8 +43,6 @@ UPDATE `requisition_header` SET `payment_process_status` = 1 WHERE `payment_stat
 
 ALTER TABLE `claims_header` ADD `paidby` INT NULL AFTER `payment_process_status`;
 
-ALTER TABLE `claims_header` ADD `hod` INT NULL AFTER `paidby`;
-
 DELETE FROM `claims_header` WHERE id NOT IN (SELECT claim_id FROM claims_detail);
 
 DELETE FROM `refunds_header` WHERE id NOT IN (SELECT refund_id FROM refunds_detail);
