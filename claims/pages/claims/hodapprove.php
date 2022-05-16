@@ -13,12 +13,12 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-12 d-flex no-block align-items-center">
-                        <h4 class="page-title">Claim Awaiting Audit</h4>
+                        <h4 class="page-title">Claim Awaiting Approval</h4>
                         <div class="ml-auto text-right">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="#">Claim</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Awaiting Audit</li>
+                                    <li class="breadcrumb-item active" aria-current="page">Awaiting Approval</li>
                                 </ol>
                             </nav>
                         </div>
@@ -47,18 +47,20 @@
                                         <tr>
                                             <th>&nbsp;</th>
                                             <th>Claim. No</th>
-                                            <th>Category</th>
                                             <th>Initiated. By</th>
+                                            <th>Claim Type</th>
                                             <th>Amount</th>
                                             <th>Auditor Status</th>
                                             <th>MD Status</th>
                                             <th>Paymt. Status</th>
                                             <th>Date</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <?php 
-                                        $data = $claim->fetch_by_criterial(array('approvalRequest'=> 1, 'Audited'=> 0, 'returned'=> 0, 'hod'=> 0, 'Auditedby'=> $_SESSION['user'][0]['id']), 'claims_header');
+                                        // $data = $claim->fetch_by_criterial(array('approvalRequest'=> 1, 'audited'=> 0, 'Auditedby'=> $_SESSION['user'][0]['id']), 'claims_header');
+                                        $data = $claim->fetch_by_criterial(array('approvalRequest'=> 1, 'audited'=> 0, 'hod'=> 1, 'hodname'=> $_SESSION['user'][0]['id'], 'hrstatus'=> 0), 'claims_header');
                                         if(count($data) > 0) {   
                                         foreach($data as $dt){
                                         ?>
@@ -68,8 +70,8 @@
                                                     <a href="printable.php?id=<?php echo $dt['id']; ?>"><i class="fa fa-print"></i></a>
                                                 </td>
                                                 <td><?php echo $dt['id']; ?></td>
-                                                <td><?php echo isset($dt['claim_categoryid']) ? $claim->get_category_name_by_id($dt['claim_categoryid']) : ""; ?></td>
                                                 <td><?php echo isset($dt['Enteredby']) ? $user->get_user_name_by_email($dt['Enteredby']) : ""; ?></td>
+                                                <td><?php echo isset($dt['claimtype']) && $dt['claimtype'] != '0' ? $dt['claimtype'] : "---"; ?></td>
                                                 <td><?php echo isset($dt['Amount']) && $dt['Amount'] !="" ? $dt['Amount'] : "--------------"; ?></td>
                                                 <td><?php if($dt['Audited'] == 0 ){ 
                                                             echo '<span class="bg-danger" style = "color: white">Pending</span>'; 

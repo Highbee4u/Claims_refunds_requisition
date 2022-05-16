@@ -138,7 +138,12 @@
                                           <span class="btn btn-success dissabled">Approved</span>
                                       <?php } else if((!empty($header))  && ( $header['approvalRequest'] == 0) ) { ?>
                                           <button class="btn btn-primary" onclick="get_modal()">New</button>
-                                          <a class="btn btn-success" onclick="approval_request('<?php echo isset($header['id']) ? $header['id'] : '' ?>')">Request Approval</a>
+                                          <?php if(count($data) < 1 ){ ?>
+                                            <a class="btn btn-success disabled">Request Approval</a>
+                                          <?php } else { ?> 
+                                            <a class="btn btn-success" onclick="approval_request('<?php echo isset($header['id']) ? $header['id'] : '' ?>')">Request Approval</a>
+                                            <?php } ?>
+                                          
                                       <?php } else if((!empty($header))  && ( $header['approvalRequest'] == 1) ) { ?>
                                         <span class="btn btn-success dissabled">Sent For Approval</span>
                                       <?php } ?>
@@ -234,6 +239,7 @@
             <form id="frmreturn"  onsubmit="return false" method = "POST" >
               <div class="form-group">
                 <input type="hidden" name="refundid" id="refundid" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
+                <input type="hidden" name="userid" id="userid" value="<?php echo isset($_SESSION['user']) ? $_SESSION['user'][0]['id'] : ''; ?>">
                   <label for="exampleInputEmail1">Enter Comment:</label>
                   <input type="text" name="description" class="form-control" id="description" >
                   <span id="descriptionerror"></span>
@@ -561,6 +567,7 @@
 
         var id = $("#refundid").val();      
         var comment = $("#description").val();      
+        var userid = $("#userid").val();      
 
         var status = false;
 
@@ -579,7 +586,7 @@
             $.ajax({
               type: "POST",
               url: url,
-              data: { 'id':id, 'description':comment },
+              data: { 'id':id, 'description':comment, 'userid':userid },
               dataType: "JSON",
               success: function (response) {
                 

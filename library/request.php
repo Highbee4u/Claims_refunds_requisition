@@ -35,6 +35,10 @@ if (isset($_REQUEST['action'])) {
             $res = $user->fetch_by_criterial(array('user_roleid'=> 2));
             echo json_encode($res);
         break;
+        case 'gethr':
+            $res = $user->fetch_by_criterial(array('user_roleid'=> 5));
+            echo json_encode($res);
+        break;
         case 'createrequisitionheader':
             $res = $req->create_requisition_header($data);
             echo json_encode($res);
@@ -218,6 +222,10 @@ if (isset($_REQUEST['action'])) {
             $res = $req->updatepaymentstatus($data);
             echo json_encode($res);
         break;
+        case 'updatepaymentprocessstatus':
+            $res = $req->updatepaymentprocessstatus($data);
+            echo json_encode($res);
+        break;
 
         // claims
 
@@ -262,6 +270,14 @@ if (isset($_REQUEST['action'])) {
             $res = $claim->approval_claim(array("id"=>$data['id']));
             echo json_encode($res);
         break;
+        case 'hod_sent_claims_to_hr':
+            $res = $claim->hod_sent_claims_to_hr($data);
+            echo json_encode($res);
+        break;
+        case 'hod_sent_claims_to_auditor':
+            $res = $claim->hod_sent_claims_to_auditor($data);
+            echo json_encode($res);
+        break;
         case 'getuserlist':
             $res = $user->fetch_all();
             echo json_encode($res);
@@ -304,12 +320,20 @@ if (isset($_REQUEST['action'])) {
             $res = $refund->updatepaymentstatus($data);
             echo json_encode($res);
         break;
+        case 'updaterefundpaymentprocessstatus':
+            $res = $refund->updatepaymentprocessstatus($data);
+            echo json_encode($res);
+        break;
         case 'approve_refund':
             $res = $refund->approve_refund($data);
             echo json_encode($res);
         break;
         case 'updatereclaimpaymentstatus':
             $res = $claim->updatepaymentstatus($data);
+            echo json_encode($res);
+        break;
+        case 'updatereclaimpaymentprocessstatus':
+            $res = $claim->updatepaymentprocessstatus($data);
             echo json_encode($res);
         break;
         case 'addcategorylist':

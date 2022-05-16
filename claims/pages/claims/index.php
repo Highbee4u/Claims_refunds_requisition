@@ -90,11 +90,11 @@
                                                 <td><?php echo isset($dt['hospital_no']) && $dt['hospital_no'] != "" ? $dt['hospital_no'] : "<span class='bg-danger' style = 'color: white'>Not Applicable</span>"; ?></td>
                                                 <td><?php echo isset($dt['claim_categoryid']) ? $claim->get_category_name_by_id($dt['claim_categoryid']) : ""; ?></td>
                                                 <td><?php echo isset($dt['Payee']) && $dt['Payee'] !="" ? $dt['Payee'] : "<span class='bg-danger' style = 'color: white'>Not Applicable</span>"; ?></td>
-                                                <td><?php echo isset($dt['returned']) && $dt['returned'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span>" : '---------'; ?></td>
+                                                <td><?php echo isset($dt['returned']) && $dt['returned'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span><br>".$dt['returneddate']  : '---------'; ?></td>
                                                 <td>
                                                     <?php if($dt['hrrequired'] == 1){ ?>
                                                         <?php if($dt['hrstatus'] == 1) {?>
-                                                            <span class="bg-success" style = "color: white">Approved</span>
+                                                            <span class="bg-success" style = "color: white">Approved</span><br><?php echo $dt['hrapproveddate']; ?>
                                                         <?php } else { ?>
                                                             <span class="bg-danger" style="color: white">Pending</span>
                                                         <?php } ?>
@@ -111,7 +111,7 @@
                                                             if($dt['Audited'] == 0 ){ 
                                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                             } else { 
-                                                                echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                                                echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['auditeddate']; 
                                                             }
                                                         }
                                                      ?>
@@ -125,7 +125,7 @@
                                                             if($dt['Approved'] == 0){ 
                                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                             } else if($dt['Approved'] == 1 ){ 
-                                                            echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                                            echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['Approveddate'];  
                                                             }
                                                         }
                                                     ?>
@@ -138,7 +138,7 @@
                                                             if($dt['Accounting_status'] == 0){ 
                                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                             } else if($dt['Accounting_status'] == 1 ){ 
-                                                                echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                                                echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['payment_date']; 
                                                             }
                                                         }
                                                     ?>
@@ -194,9 +194,6 @@
                 <label for="exampleInputEmail1" id="lblhospitalno">Staff Number (If Applicable):</label>
                 <input type="text" name="hospitalno" class="form-control" id="hospitalno"></textarea>
                 <span id="hospitalnoerror"></span>
-                <!-- <label for="exampleInputEmail1" id="lblpatientsname">Patients Name (If Applicable):</label>
-                <input type="text" name="patientname" class="form-control" id="patientname"></textarea>
-                <span id="patientnameerror"></span> -->
                 <label for="exampleInputEmail1">Account No (If Applicable):</label>
                 <input type="text" name="account_number" class="form-control" id="account_number" ></textarea>
                 <span id="accountnumbererror"></span>
@@ -206,13 +203,16 @@
                 <label for="exampleInputEmail1">Bank Name (If Applicable):</label>
                 <input type="text" name="bank_name" class="form-control" id="bank_name" ></textarea>
                 <span id="banknameerror"></span>
-                <label for="exampleInputEmail1">Auditor Status:</label>
+                <label for="exampleInputEmail1">Select HOD:</label>
+                <select name="hod" class="form-control" id="hod" required ></select>
+                <span id="hodstatuserror"></span>
+                <!-- <label for="exampleInputEmail1">Auditor Status:</label>
                 <select name="auditstatus" class="form-control" id="auditstatus" onchange="get_audit_status(this)" required >
                     <option value="">-- Send status --</option>
                     <option value="Auditor">Send to Auditor</option>
                     <option value="hr">Send to HR</option>
                 </select>
-                <span id="auditstatuserror"></span>
+                <span id="auditstatuserror"></span> -->
                 <div id="divauditor">
                     <label for="exampleInputEmail1">To be Audited By:</label>
                     <select name="auditedby" class="form-control" id="auditedby"  ></select>
@@ -246,34 +246,48 @@
   let Approvals;
   let claimcategory;
   let hrlist;
+  let hodlist;
 
-  function get_auditor(){
+  function get_hod(){
 
-    let url = "../../../library/request.php?action=getauditor";
-
-    $.ajax({
-      type: "POST",
-      url: url,
-      dataType: "JSON",
-      success: function (response) {
-          Auditors = response;
-      }
-    });
-  }
-
-  function get_hr(){
-
-    let url = "../../../library/request.php?action=gethr";
+    let url = "../../../library/request.php?action=gethod";
 
     $.ajax({
       type: "POST",
       url: url,
       dataType: "JSON",
       success: function (response) {
-          hrlist = response;
+          hodlist = response;
       }
     });
   }
+//   function get_auditor(){
+
+//     let url = "../../../library/request.php?action=getauditor";
+
+//     $.ajax({
+//       type: "POST",
+//       url: url,
+//       dataType: "JSON",
+//       success: function (response) {
+//           Auditors = response;
+//       }
+//     });
+//   }
+
+//   function get_hr(){
+
+//     let url = "../../../library/request.php?action=gethr";
+
+//     $.ajax({
+//       type: "POST",
+//       url: url,
+//       dataType: "JSON",
+//       success: function (response) {
+//           hrlist = response;
+//       }
+//     });
+//   }
 
   function delete_claims(id){
     if(confirm("Are you sure you want to delete ?")){
@@ -300,10 +314,16 @@
 
   function create_modal(){
 
-    $("#addclaims #auditedby").empty();
-    $("#addclaims #auditedby").append("<option value=''>-- Select Auditor --</option>");
-    $.each(Auditors, function (indexInArray, valueOfElement) { 
-        $("#addclaims #auditedby").append("<option value="+Auditors[indexInArray].id+">"+Auditors[indexInArray].name+"</option>");
+    // $("#addclaims #auditedby").empty();
+    // $("#addclaims #auditedby").append("<option value=''>-- Select Auditor --</option>");
+    // $.each(Auditors, function (indexInArray, valueOfElement) { 
+    //     $("#addclaims #auditedby").append("<option value="+Auditors[indexInArray].id+">"+Auditors[indexInArray].name+"</option>");
+    // });
+
+    $("#addclaims #hod").empty();
+    $("#addclaims #hod").append("<option value=''>-- Select HOD --</option>");
+    $.each(hodlist, function (indexInArray, valueOfElement) { 
+        $("#addclaims #hod").append("<option value="+hodlist[indexInArray].id+">"+hodlist[indexInArray].name+"</option>");
     });
     
     $("#addclaims #claimscategory").empty();
@@ -312,11 +332,11 @@
         $("#addclaims #claimscategory").append("<option value="+claimcategory[indexInArray].id+">"+claimcategory[indexInArray].name+"</option>");
     });
 
-    $("#addclaims #hr").empty();
-    $("#addclaims #hr").append("<option value=''>-- Select HR --</option>");
-    $.each(hrlist, function (indexInArray, valueOfElement) { 
-        $("#addclaims #hr").append("<option value="+hrlist[indexInArray].id+">"+hrlist[indexInArray].name+"</option>");
-    });
+    // $("#addclaims #hr").empty();
+    // $("#addclaims #hr").append("<option value=''>-- Select HR --</option>");
+    // $.each(hrlist, function (indexInArray, valueOfElement) { 
+    //     $("#addclaims #hr").append("<option value="+hrlist[indexInArray].id+">"+hrlist[indexInArray].name+"</option>");
+    // });
 
 
     $("#addclaims #enteredby").val("<?php echo isset($_SESSION['user']) ? $_SESSION['user'][0]['email'] : "" ; ?>");
@@ -332,41 +352,17 @@
   $('form#frmClaims').submit(function(){
 
     var enteredby = $('#enteredby').val();
-    var auditedby = $('#auditedby').val();
     var hospitalno = $('#hospitalno').val();
-    // var patientname = $('#patientname').val();
     var department = $('#departmentid').val();
     var payee = $('#payee').val();
     var claimscategory = $('#claimscategory').val();
-    var auditstatus = $('#auditstatus').val();
-    var hr = $('#hr').val();
-    var hrrequired = 0;
     var account_number = $('#account_number').val();
     var account_name = $('#account_name').val();
     var bank_name = $('#bank_name').val();
+    var hod = $('#hod').val();
     
         var status = "";
 
-        if(auditstatus == ""){
-            $("#auditstatuserror").html("Audi cannot be empty").addClass("text-danger");
-        }else if(auditstatus == "Auditor"){
-            if(auditedby == ""){
-                $('#auditedbyerror').html('Audited by cannot be empty').addClass('text-danger');
-                status = true;
-            }else{
-                $('#auditedbyerror').html(" ");
-            } 
-        }else if(auditstatus == "hr"){
-            if(hr == ""){
-                $('#hrerror').html('HR cannot be empty for Auditedby HR').addClass('text-danger');
-                status = true;
-            }else{
-                $('#hrerror').html(" ");
-            } 
-            hrrequired = 1;
-        }else{
-            $("#auditstatuserror").html("");
-        }
           
             
             if(payee == ""){
@@ -389,16 +385,14 @@
                 'Enteredby': enteredby, 
                 'departmentid':department,
                 'hospital_no': hospitalno, 
-                // 'Patient_name':patientname, 
                 'Payee': payee, 
-                'Auditedby':auditedby, 
-                'hrrequired': hrrequired,
-                'hrname': hr,
                 'returned': 0,
                 'claim_categoryid':claimscategory,
                 'account_number':account_number,
                 'account_name':account_name,
                 'bank_name':bank_name,
+                'hodname':hod,
+                'hod': 1
             }
             console.log(data);
             
@@ -452,9 +446,10 @@
   }
 
   $(document).ready(function () {
-    get_auditor();
+    // get_auditor();
     get_claims_category();
-    get_hr();
+    // get_hr();
+    get_hod();
   });
 
 </script>

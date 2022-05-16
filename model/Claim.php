@@ -102,7 +102,7 @@ class Claim {
 
         $filters = substr($filter,0, -3);
 
-        $sql = 'SELECT * FROM '.$table_name.' WHERE '.$filters;
+        $sql = 'SELECT * FROM '.$table_name.' WHERE '.$filters. ' ORDER BY id DESC'; 
 
         $user_data = array();
         $count_row = 0;
@@ -203,7 +203,7 @@ class Claim {
 
         $cleaneddata = $this->sanitize($data);        
 
-        $query = "UPDATE `$this->table` SET `Approved`='1', `Audited`='1', `hrstatus`='1', `hrname`='".$cleaneddata['userid']."', `Approvedby`='".$cleaneddata['userid']."',`Auditedby`='".$cleaneddata['userid']."', `Approveddate` = '".date('Y-m-d')."' WHERE id ='".$cleaneddata['id']."'";
+        $query = "UPDATE `$this->table` SET `Approved`='1', `Audited`='1', `hrstatus`='1', `hrname`='".$cleaneddata['userid']."', `Approvedby`='".$cleaneddata['userid']."',`Auditedby`='".$cleaneddata['userid']."', `Approveddate` = '".date('Y-m-d h:i:s', time())."', `auditeddate` = '".date('Y-m-d h:i:s', time())."' WHERE id ='".$cleaneddata['id']."'";
 
         // return $query;
         $result = $con->query($query);
@@ -217,19 +217,32 @@ class Claim {
 
         $cleaneddata = $this->sanitize($data);        
 
-        $query = "UPDATE `$this->table` SET `Audited`='1', `Approvedby`='".$cleaneddata['approvedby']."',`Auditedby`='".$cleaneddata['userid']."' WHERE id ='".$cleaneddata['id']."'";
+        $query = "UPDATE `$this->table` SET `Audited`='1', `Approvedby`='".$cleaneddata['approvedby']."',`Auditedby`='".$cleaneddata['userid']."', `auditeddate` = '".date('Y-m-d h:i:s', time())."' WHERE id ='".$cleaneddata['id']."'";
 
         $result = $con->query($query);
 
         return $result ? 1 : 0;
     }
 
-    public function updatepaymentstatus($refundid){
+    public function updatepaymentstatus($data){
         $con = connection::getConnection();
 
-        $id = implode(',',$refundid);       
+        $cleaneddata = $this->sanitize($data); 
 
-        $query = "UPDATE `$this->table` SET `Accounting_status`='1', `payment_date`='".date('Y-m-d h:i:s', time())."' WHERE id ='".$id."'";
+        $query = "UPDATE `$this->table` SET `Accounting_status`='1', `payment_process_status`='1', `payment_date`='".date('Y-m-d h:i:s', time())."', `paidby` = '".$cleaneddata['userid']."' WHERE id ='".$cleaneddata['id']."'";
+
+        $result = $con->query($query);
+
+        return $result ? 1 : 0;
+    }
+
+    public function updatepaymentprocessstatus($claimid){
+
+        $con = connection::getConnection();
+
+        $id = implode(',', $claimid); 
+
+        $query = "UPDATE `$this->table` SET `payment_process_status`='1' WHERE id ='".$id."'";
 
         $result = $con->query($query);
 
@@ -323,6 +336,32 @@ class Claim {
         }
 
         return $name;
+    }
+
+    public function hod_sent_claims_to_hr($data){
+        $con = connection::getConnection();
+        
+        $cleaneddata = $this->sanitize($data);
+
+        $query = "UPDATE $this->table SET `hrname` = '".$cleaneddata['hrname']."', `hrrequired` = '".$cleaneddata['hrrequired']."', `hod`= '0' WHERE `id` = '".$cleaneddata['id']."'";
+        
+        $result = $con->query($query);
+
+        return $result ? true : false;
+        
+    }
+
+    public function hod_sent_claims_to_auditor($data){
+        $con = connection::getConnection();
+
+        $cleaneddata = $this->sanitize($data);
+
+        $query = "UPDATE $this->table SET `Auditedby` = '".$cleaneddata['Auditedby']."',`hod` = '0' WHERE `id` = '".$cleaneddata['id']."'";
+
+        $result = $con->query($query);
+
+        return $result ? 1 : 0;
+
     }
     
 }

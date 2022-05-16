@@ -74,6 +74,7 @@ require '../../../model/User.php'; ?>
                             <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Approval </span></a>
                                 <ul aria-expanded="false" class="collapse  first-level">
                                     <li class="sidebar-item"><a href="<?php echo "../refund/hmoapprove.php"; ?>" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Approve Refund(s) </span></a></li>
+                                    <li class="sidebar-item"><a href="<?php echo "../claims/hodapprove.php"; ?>" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu"> Approve Claim(s) </span></a></li>
                                 </ul>
                             </li>
                         <?php } ?>

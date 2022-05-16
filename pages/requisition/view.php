@@ -63,6 +63,18 @@
                                             <td>Description:</td>
                                             <td colspan ="3"><?php echo isset($header['description']) ? $header['description'] : ""; ?></td>
                                         </tr>
+                                        <?php if(isset($header['returned']) && $header['returned'] == 1){ ?>
+                                        <tr>
+                                          <td>Status:</td>
+                                          <td><?php echo isset($header['returned']) && $header['returned'] == 1 ? "<span class='bg-danger blink_text'>Returned</span><br><b>Returned On: </b>".(isset($header['returneddate']) ? $header['returneddate'] : "0000-00-00") : ""; ?></td>
+                                          <td>Returned By:</td>
+                                          <td><?php echo isset($header['returnedby']) ? $user->get_user_name_by_id($header['returnedby']) : ""; ?></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Return Comment:</td>
+                                          <td colspan="3"><?php echo isset($header['coment']) ? $header['coment'] : ""; ?></td>
+                                        </tr>
+                                      <?php } ?>
                                     </table>
                                     <hr>
                                     <h4>Item Details</h4></div><hr>
@@ -75,6 +87,7 @@
                                                 <th>UOM</th>
                                                 <?php echo isset($_SESSION['user']) && ($_SESSION['user'][0]['user_roleid'] == '1' || $_SESSION['user'][0]['user_roleid'] == '-1' || $_SESSION['user'][0]['user_roleid'] == '2') ? '<th>Price</th>' : ""; ?>
                                                 <th>Quantity</th>
+                                                <th>Subtotal</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -97,6 +110,7 @@
                                                 <td><?php echo isset($dt['uom']) ? $dt['uom'] : ""; ?></td>
                                                 <?php echo isset($_SESSION['user']) && ($_SESSION['user'][0]['user_roleid'] == '1' || $_SESSION['user'][0]['user_roleid'] == '-1' || $_SESSION['user'][0]['user_roleid'] == '2') ? '<td>'.$dt['price'].'</td>' : ""; ?>
                                                 <td><?php echo isset($dt['qty']) ? $dt['qty'] : ""; ?></td>
+                                                <td><?php echo isset($dt['qty'], $dt['price']) ? ($dt['price'] * $dt['qty']) : ""; ?></td>
                                                 </tr>
                                             <?php } 
                                             if(isset($_SESSION['user']) && ($_SESSION['user'][0]['user_roleid'] == '1' || $_SESSION['user'][0]['user_roleid'] == '-1' || $_SESSION['user'][0]['user_roleid'] == '2')){

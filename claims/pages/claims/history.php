@@ -80,6 +80,9 @@
                                                 <th>MD Status</th>
                                                
                                                 <th>Paymt. Status</th>
+                                                <?php  if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
+                                                <th>Paymt. Proc. Status</th>
+                                                <?php } ?>
                                                 <th>Paymt. Date</th>
                                                 <th>Date</th>
                                             </tr>
@@ -133,7 +136,7 @@
                                         <td>
                                             <?php if($dt['Accounting_status'] == 0){ ?>
                                                 <?php if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
-                                                    <button class="btn btn-xs btn-primary" onclick="update_payment_status('<?php echo $dt['id'] ?>')">Update</button>
+                                                    <button class="btn btn-xs btn-primary" onclick="update_payment_status('<?php echo $dt['id'] ?>','<?php echo isset($_SESSION['user']) ? $_SESSION['user'][0]['id'] : '' ; ?>')">Update</button>
                                                 <?php } else { 
                                                     echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                 } ?> 
@@ -142,6 +145,15 @@
                                                 echo '<span class="bg-success" style = "color: white">Paid</span>'; 
                                             } ?>
                                         </td>
+                                            <?php if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
+                                                <td>
+                                                    <?php if($dt['payment_process_status'] == 0){ ?>
+                                                        <button class="btn btn-xs btn-primary" onclick="update_payment_process_status('<?php echo $dt['id'] ?>')">Update</button>
+                                                    <?php } else { 
+                                                            echo 'Processed'; 
+                                                    } ?>
+                                                </td>
+                                            <?php } ?>
                                         <td>
                                             <?php if($dt['payment_date'] == "0000-00-00" || $dt['payment_date'] == NULL){ 
                                                     echo ' -------- '; 
@@ -196,13 +208,13 @@
         window.location.href = base_url;
     }
 
-    function update_payment_status(id){
+    function update_payment_status(id, userid){
       if(id.length != ""){
           if(confirm("Are you sure you have made payment!?\r\n this cannot be Reverse")){
             $.ajax({
                 url: "../../../library/request.php?action=updatereclaimpaymentstatus",
                 type: 'POST',
-                data: {"id":id},
+                data: {"id":id, "userid":userid},
                 dataType: 'JSON',
                 success:function(data){
                     if(data == 1){
@@ -219,7 +231,31 @@
             })
           }
       }
-  }
+    }
+    function update_payment_process_status(id){
+      if(id.length != ""){
+          if(confirm("Are you sure you have processed this payment!?\r\n this cannot be Reverse")){
+            $.ajax({
+                url: "../../../library/request.php?action=updatereclaimpaymentprocessstatus",
+                type: 'POST',
+                data: {"id":id},
+                dataType: 'JSON',
+                success:function(data){
+                    if(data == 1){
+                        alert("Payment Marked as Processed");
+                        window.location.reload();
+                    }else{
+                        alert("Unable to update status, try later");
+                    }
+                    
+                }, 
+                error: function(error){
+                    console.log(error);
+                }
+            })
+          }
+      }
+    }
 
 
 

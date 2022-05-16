@@ -83,8 +83,8 @@ class Requisition {
 
         $filters = substr($filter,0, -3);
 
-        $sql = 'SELECT * FROM '.$this->table.' WHERE '.$filters;
-        
+        $sql = 'SELECT * FROM '.$this->table.' WHERE '.$filters .' ORDER BY reqnumber DESC';
+
         $user_data = array();
         $count_row = 0;
 
@@ -147,7 +147,7 @@ class Requisition {
     public function approve_requisition($data){
         $con = connection::getConnection();
 
-        $query = "UPDATE `$this->table` SET `approved` = 1 WHERE reqnumber='".$data['id']."'";
+        $query = "UPDATE `$this->table` SET `approved` = 1, `coment` = '', `approveddate`= '".date('Y-m-d h:i:s', time())."'  WHERE reqnumber='".$data['id']."'";
         
         $result = $con->query($query);
 
@@ -160,7 +160,7 @@ class Requisition {
 
         $id = implode(',', $reqid);
 
-        $query = "UPDATE `$this->table` SET `audited` = 1 WHERE reqnumber='$id'";
+        $query = "UPDATE `$this->table` SET `audited` = 1, `auditeddate`= '".date('Y-m-d h:i:s', time())."' WHERE reqnumber='$id'";
 
         $result = $con->query($query);
 
@@ -184,7 +184,7 @@ class Requisition {
 
         $con = connection::getConnection();
 
-        $query = "UPDATE ".$this->table." SET awaiting_price = 0, returned = 0  WHERE reqnumber='".$id."'";
+        $query = "UPDATE ".$this->table." SET awaiting_price = 0, returned = 0, procapproveddate = '".date('Y-m-d h:i:s', time())."'  WHERE reqnumber='".$id."'";
 
         $result = $con->query($query);
 
@@ -229,7 +229,7 @@ class Requisition {
 
         $cleaneddata = $this->sanitize($data);        
 
-        $query = "UPDATE `$this->table` SET `approved`='1', `audited`='1', `approvedby`='".$cleaneddata['userid']."',`auditedby`='".$cleaneddata['userid']."' WHERE reqnumber ='".$cleaneddata['id']."'";
+        $query = "UPDATE `$this->table` SET `approved`='1', `audited`='1', `approvedby`='".$cleaneddata['userid']."',`auditedby`='".$cleaneddata['userid']."', `auditeddate` = '".date('Y-m-d h:i:s', time())."', , `approveddate` = '".date('Y-m-d h:i:s', time())."', `coment` = ''  WHERE reqnumber ='".$cleaneddata['id']."'";
 
         $result = $con->query($query);
 
@@ -244,7 +244,7 @@ class Requisition {
 
         $cleaneddata = $this->sanitize($data);        
 
-        $query = "UPDATE `$this->table` SET `audited`='1', `approvedby`='".$cleaneddata['approvedby']."',`auditedby`='".$cleaneddata['userid']."' WHERE reqnumber ='".$cleaneddata['id']."'";
+        $query = "UPDATE `$this->table` SET `audited`='1', `approvedby`='".$cleaneddata['approvedby']."',`auditedby`='".$cleaneddata['userid']."', `auditeddate` = '".date('Y-m-d h:i:s', time())."', `coment` = '' WHERE reqnumber ='".$cleaneddata['id']."'";
 
         $result = $con->query($query);
 
@@ -285,7 +285,7 @@ class Requisition {
 
         $id = implode(',',$reqid);
 
-        $query = "UPDATE `$this->table` SET `approvalRequest` = '1', `awaiting_price` = '1'  WHERE reqnumber='$id'";
+        $query = "UPDATE `$this->table` SET `approvalRequest` = '1', `awaiting_price` = '1', `return` = '0'  WHERE reqnumber='$id'";
 
         // return $query;
         $result = $con->query($query);
@@ -299,7 +299,7 @@ class Requisition {
 
         $cleaneddata = $this->sanitize($data);
 
-        $query = "UPDATE `$this->table` SET `coment` = '".$cleaneddata['description']."', `audited` = 0, `approved` = 0, `awaiting_price` = 1, `returned` = 1 WHERE `reqnumber`= '".$cleaneddata['requisitionid']."'";
+        $query = "UPDATE `$this->table` SET `coment` = '".$cleaneddata['description']."', `audited` = 0, `approved` = 0, `awaiting_price` = 1, `approvalRequest`= 0, `returned` = 1, `returnedby` = '".$cleaneddata['userid']."', returneddate = '".date('Y-m-d h:i:s', time())."' WHERE `reqnumber`= '".$cleaneddata['requisitionid']."'";
     
         $result = $con->query($query);
 
@@ -329,13 +329,26 @@ class Requisition {
         
     }
 
-    public function updatepaymentstatus($reqid){
+    public function updatepaymentstatus($data){
 
         $con = connection::getConnection();
 
-        $id = implode(',',$reqid);       
+        $cleaneddata = $this->sanitize($data);      
 
-        $query = "UPDATE `$this->table` SET `payment_status`='1', `payment_date`='".date('Y-m-d h:i:s', time())."' WHERE reqnumber ='".$id."'";
+        $query = "UPDATE `$this->table` SET `payment_status`='1', `payment_date`='".date('Y-m-d h:i:s', time())."', `payment_process_status` = '1', `paidby` = '".$cleaneddata['userid']."' WHERE reqnumber ='".$cleaneddata['id']."'";
+
+        $result = $con->query($query);
+
+        return $result ? 1 : 0;
+    }
+
+    public function updatepaymentprocessstatus($reqid){
+
+        $con = connection::getConnection();
+
+        $id = implode(',', $reqid); 
+
+        $query = "UPDATE `$this->table` SET `payment_process_status`='1' WHERE reqnumber ='".$id."'";
 
         $result = $con->query($query);
 

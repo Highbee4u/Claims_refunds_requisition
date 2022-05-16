@@ -63,13 +63,25 @@
                                       <tr>
                                           <td>Department:</td>
                                           <td><?php echo isset($header['departmentid']) && $header['departmentid'] != 0 ? $department->get_depart_name_by_id($header['departmentid']) : ""; ?></td>
-                                          <td>Description:</td>
-                                          <td><?php echo isset($header['description']) ? $header['description'] : ""; ?></td>
+                                          <td>Requisited By:</td>
+                                          <td><?php echo isset($header['reqby']) ? $user->get_user_name_by_email($header['reqby']) : "" ?></td>
                                       </tr>
                                       <tr>
-                                          <td>Requisited By:</td>
-                                          <td colspan="3"><?php echo isset($header['reqby']) ? $user->get_user_name_by_email($header['reqby']) : "" ?></td>
+                                          <td>Description:</td>
+                                          <td colspan="3"><?php echo isset($header['description']) ? $header['description'] : ""; ?></td>
                                       </tr>
+                                      <?php if(isset($header['returned']) && $header['returned'] == 1){ ?>
+                                        <tr>
+                                          <td>Status:</td>
+                                          <td><?php echo isset($header['returned']) && $header['returned'] == 1 ? "<span class='bg-danger blink_text'>Returned</span><br><b>Returned On: </b>".(isset($header['returneddate']) ? $header['returneddate'] : "0000-00-00") : ""; ?></td>
+                                          <td>Returned By:</td>
+                                          <td><?php echo isset($header['returnedby']) ? $user->get_user_name_by_id($header['returnedby']) : ""; ?></td>
+                                        </tr>
+                                        <tr>
+                                          <td>Return Comment:</td>
+                                          <td colspan="3"><?php echo isset($header['coment']) ? $header['coment'] : ""; ?></td>
+                                        </tr>
+                                      <?php } ?>
                                     </table>
                                     <hr>
                                     <h4>Item Details</h4></div><hr>
@@ -82,6 +94,7 @@
                                               <th>UOM</th>
                                               <?php echo isset($_SESSION['user']) && ($_SESSION['user'][0]['user_roleid'] == '1' || $_SESSION['user'][0]['user_roleid'] == '-1' || $_SESSION['user'][0]['user_roleid'] == '2') ? '<th>Price</th>' : ""; ?>
                                               <th>Quantity</th>
+                                              <th>Subtotal</th>
                                           </tr>
                                         </thead>
                                         <tbody>
@@ -104,10 +117,11 @@
                                                 <td><?php echo isset($dt['uom']) ? $dt['uom'] : ""; ?></td>
                                                 <?php echo isset($_SESSION['user']) && ($_SESSION['user'][0]['user_roleid'] == '1' || $_SESSION['user'][0]['user_roleid'] == '-1' || $_SESSION['user'][0]['user_roleid'] == '2') ? '<td>'.$dt['price'].'</td>' : ""; ?>
                                                 <td><?php echo isset($dt['qty']) ? $dt['qty'] : ""; ?></td>
+                                                <td><?php echo isset($dt['qty'], $dt['price']) ? ($dt['price'] * $dt['qty']) : ""; ?></td>
                                                 </tr>
                                             <?php } 
                                               if(isset($_SESSION['user']) && ($_SESSION['user'][0]['user_roleid'] == '1' || $_SESSION['user'][0]['user_roleid'] == '-1' || $_SESSION['user'][0]['user_roleid'] == '2')){
-                                                  echo "<tr><td colspan='5' class='text-right'>Total:</td><td>#".$total."</td></tr>";
+                                                  echo "<tr><td colspan='6' class='text-right'>Total:</td><td>#".$total."</td></tr>";
                                               }
                                                     
                                               } else { ?>
@@ -122,7 +136,11 @@
                                           <span class="btn btn-success dissabled">Approval Requested</span>
                                       <?php } else if($header['approvalRequest'] == 0)  { ?>
                                           <button class="btn btn-primary" onclick="get_modal('<?php echo $_GET['rectype'] ?>')">New</button>
+                                          <?php if(count($data) < 1 ){ ?>
+                                            <a class="btn btn-success disabled">Request Approval</a>
+                                          <?php } else { ?> 
                                           <a class="btn btn-success" onclick="approval_request('<?php echo isset($header['reqnumber']) ? $header['reqnumber'] : '' ?>')">Request Approval</a>
+                                            <?php } ?>
                                       <?php } ?>
 
                                       <?php if(isset($_SESSION['user']) && $user->canAudit($_SESSION['user'][0]['id']) && ($header['approvalRequest'] == 1) && ($header['audited'] == 0)) {?>
@@ -245,6 +263,7 @@
           <form id="frmreturn"  onsubmit="return false" method = "POST" >
             <div class="form-group">
               <input type="hidden" name="requisitionid" id="requisitionid" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
+              <input type="hidden" name="userid" id="userid" value="<?php echo isset($_SESSION['user']) ? $_SESSION['user'][0]['id'] : ''; ?>">
                 <label for="exampleInputEmail1">Enter Comment:</label>
                 <input type="text" name="description" class="form-control" id="description" >
                 <span id="descriptionerror"></span>
@@ -567,6 +586,7 @@
 
         var reqid = $("#requisitionid").val();      
         var comment = $("#description").val();      
+        var userid = $("#userid").val();      
 
         var status = false;
 
@@ -584,7 +604,7 @@
           $.ajax({
             type: "POST",
             url: url,
-            data: { 'requisitionid':reqid, 'description':comment },
+            data: { 'requisitionid':reqid, 'description':comment, 'userid':userid },
             dataType: "JSON",
             success: function (response) {
               

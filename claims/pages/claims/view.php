@@ -87,8 +87,12 @@
                                     
                                       <tr>
                                           <td>Total Amount:</td>
-                                          <td><?php echo isset($header['Amount']) ? $header['Amount'] : ""; ?></td>
+                                          <td><?php echo isset($header['Amount']) ? "#".number_format($header['Amount'],2,'.',',')  : ""; ?></td>
                                          
+                                      </tr>
+                                      <tr>
+                                        <td>Category</td>
+                                        <td colspan="3"><?php echo isset($header['claim_categoryid']) ? $claim->get_category_name_by_id($header['claim_categoryid']) : ""; ?></td>
                                       </tr>
                                     </table>
                                     <hr>
@@ -125,12 +129,12 @@
                                                         <?php } ?>
                                                         <td> <?php echo $counter ++; ?> </td>
                                                         <td><?php echo isset($dt['Description']) ? $dt['Description'] : ""; ?></td>
-                                                        <td><?php echo isset($dt['Amount']) ? $dt['Amount'] : ""; ?></td>
+                                                        <td><?php echo isset($dt['Amount']) ? "#".number_format($dt['Amount'],2,'.',',') : ""; ?></td>
                                                       
                                                       </tr>
                                             <?php } 
                                               if(isset($_SESSION['user']) && ($_SESSION['user'][0]['user_roleid'] == '1' || $_SESSION['user'][0]['user_roleid'] == '-1' || $_SESSION['user'][0]['user_roleid'] == '2')){
-                                                  echo "<tr><td colspan='3' class='text-right'>Total:</td><td>#".$total."</td></tr>";
+                                                  echo "<tr><td colspan='3' class='text-right'>Total:</td><td>#".number_format($total,2,'.',',')."</td></tr>";
                                               }
                                                     
                                               } else { ?>

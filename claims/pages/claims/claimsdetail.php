@@ -76,14 +76,17 @@
                                           <td>Account Number:</td>
                                           <td><?php echo isset($header['account_number']) && $header['account_number'] != NULL  ? $header['account_number'] : "Not Applicable"; ?></td>
                                           <td>Total Amount:</td>
-                                          <td><?php echo isset($header['Amount']) ? $header['Amount'] : ""; ?></td>
+                                          <td><?php echo isset($header['Amount']) ? "#".number_format($header['Amount'],2,'.',',') : ""; ?></td>
                                       </tr>
-                                      
+                                      <tr>
+                                        <td>Category</td>
+                                        <td colspan="3"><?php echo isset($header['claim_categoryid']) ? $claim->get_category_name_by_id($header['claim_categoryid']) : ""; ?></td>
+                                      </tr>
                                       
                                       <?php if(isset($header['returned']) && $header['returned'] == 1){ ?>
                                         <tr>
                                           <td>Status:</td>
-                                          <td colspan="3"><?php echo isset($header['returned']) && $header['returned'] == 1 ? "<span class='bg-danger blink_text'>Returned</span>" : ""; ?></td>
+                                          <td colspan="3"><?php echo isset($header['returned']) && $header['returned'] == 1 ? "<span class='bg-danger blink_text'>Returned</span><br><b>Returned On: ".$header['returneddate'] : ""; ?></td>
                                           
                                         </tr>
                                         <tr>
@@ -127,7 +130,7 @@
                                                         <?php } ?>
                                                         <td> <?php echo $counter ++; ?> </td>
                                                         <td><?php echo isset($dt['Description']) ? $dt['Description'] : "----------"; ?></td>
-                                                        <td><?php echo isset($dt['Amount']) ? $dt['Amount'] : ""; ?></td>
+                                                        <td><?php echo isset($dt['Amount']) ? "#".number_format($dt['Amount'],2,'.',',') : ""; ?></td>
                                                       
                                                       </tr>
                                             <?php } 
@@ -145,7 +148,12 @@
                                     <div>
                                       <?php if ((!empty($header))  && $header['approvalRequest'] != 1){ ?>
                                           <button class="btn btn-primary" onclick="get_modal()">New</button>
-                                          <a class="btn btn-success" onclick="approval_request('<?php echo isset($header['id']) ? $header['id'] : '' ?>')">Request Approval</a>
+                                          <?php if(count($data) < 1 ){ ?>
+                                            <a class="btn btn-success disabled">Request Approval</a>
+                                          <?php } else { ?> 
+                                            <a class="btn btn-success" onclick="approval_request('<?php echo isset($header['id']) ? $header['id'] : '' ?>')">Request Approval</a>
+                                            <?php } ?>
+                                          
                                       <?php } ?>
 
                                       <?php if(isset($_SESSION['user']) && $user->canAudit($_SESSION['user'][0]['id']) && $header['approvalRequest'] == 1 && $header['Audited'] == 0 ) {?>
@@ -155,12 +163,15 @@
                                       <?php if(isset($_SESSION['user']) && $user->canApprove($_SESSION['user'][0]['id'])  && $header['approvalRequest'] == 1 && $header['Approved'] == 0) {?>
                                               <a class="btn btn-success" onclick="approve('<?php echo isset($header['id']) ? $header['id'] : '' ?>')">Approve</a>
                                               <button class="btn btn-danger" onclick="get_return_modal('<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>')">Return</button>
-
                                       <?php } ?>  
                                       <?php if(isset($_SESSION['user']) && $user->is_hr($_SESSION['user'][0]['id']) && $header['approvalRequest'] == 1 && $header['Audited'] == 0 ) {?>
                                               <a class="btn btn-success" onclick="get_dialog_approval_status_dialog('<?php echo isset($header['id']) ? $header['id'] : '' ?>')">Approve</a>
                                               <button class="btn btn-danger" onclick="get_return_modal('<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>')">Return</button>
-                                      <?php } ?>                                  
+                                      <?php } ?>  
+                                      <?php if(isset($_SESSION['user']) && $user->is_hod($_SESSION['user'][0]['id'])  && $header['approvalRequest'] == 1 && $header['Approved'] == 0) {?>
+                                              <a class="btn btn-success" onclick="hod_approve_claims('<?php echo isset($header['id']) ? $header['id'] : '' ?>')">Approve</a>
+                                              <button class="btn btn-danger" onclick="get_return_modal('<?php echo isset($_GET['id']) ? $_GET['id'] : '' ?>')">Return</button>
+                                      <?php } ?>                                
                                     </div>
                                     
                                 </div>
@@ -281,30 +292,28 @@
       </div>
     </div>
 
-    <div class="modal fade" id="approvalstatusdialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal fade" id="audithrstatusdialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Audit And Approval Status</h5>
+            <h5 class="modal-title" id="exampleModalLongTitle">Auditor And HR Status</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-          <form id="frmaudit"  onsubmit="return false" method = "POST" >
+          <form id="frmstatusaction"  onsubmit="return false" method = "POST" >
             <div class="form-group">
               <input type="hidden" name="claimid" id="claimid" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
               <input type="hidden" name="userid" id="userid" value="<?php echo isset($_SESSION['user']) ? $_SESSION['user'][0]['id'] : ''; ?>">
                 <label for="exampleInputEmail1">Approval Action:</label>
-                <select name="status" class="form-control" onchange="getSelectedaction(this)" id="status" >
+                <select name="status" class="form-control" onchange="getSelectedstatusaction(this)" id="status" >
                   <option value="">Choose Action..</option>
-                  <option value="Approve">Approve</option>
-                  <option value="Audit">Sent For Approval</option>
+                  <option value="Audit">Send to Auditor</option>
+                  <option value="hr">Send to HR</option>
                 </select>
                 <span id="statuserror"></span>
-                 <label for="exampleInputEmail1" id="lbltobeapproved">To be Approved By:</label>
-                <select name="approvedby" class="form-control" id="approvedby" required></select>
-                <span id="approvedbyerror"></span>
+                <div id="action"></div>
             </div>
             
           </div>
@@ -348,13 +357,48 @@
       </div>
     </div>
 
-
+    <!-- HOD process status -->
+    <div class="modal fade" id="approvalstatusdialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Audit And Approval Status</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          <form id="frmaudit"  onsubmit="return false" method = "POST" >
+            <div class="form-group">
+              <input type="hidden" name="id" id="id" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
+              <input type="hidden" name="userid" id="userid" value="<?php echo isset($_SESSION['user']) ? $_SESSION['user'][0]['id'] : ''; ?>">
+                <label for="exampleInputEmail1">Approval Action:</label>
+                <select name="status" class="form-control" onchange="getSelectedaction(this)" id="status" >
+                  <option value="">Choose Action..</option>
+                  <option value="Approve">Approve</option>
+                  <option value="Audit">Sent For Approval</option>
+                </select>
+                <span id="statuserror"></span>
+                
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+                <button type="submit" class="btn btn-success" id="savedetail">Proceed</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
 <?php  require '../includes/footer.php'; ?>
 <script>
 
     let itemlist;
     let Approvals;
     let Auditors;
+    let hrs;
 
     function get_modal(){ 
       $("#adddetail").modal('show');
@@ -542,6 +586,30 @@
         }
     }
 
+    function getSelectedstatusaction(id){
+      var auditdata = '<label for="exampleInputEmail1">Audit By:</label><select name="auditor" class="form-control" id="auditor" required ><span id="auditerror"></span>';
+
+      var hrdata = '<label for="exampleInputEmail1">Select HR:</label><select name="hr" class="form-control" id="hr" required>';
+
+        if(id != ""){
+          if(id.value == "Audit"){
+            
+            $("#frmstatusaction #action").append(auditdata);
+            $("#frmstatusaction #action #auditor").append("<option value=''>-- To be Audited By --</option>");
+            $.each(Auditors, function (indexInArray, valueOfElement) { 
+                $("#frmstatusaction #action #auditor").append("<option value="+Auditors[indexInArray].id+">"+Auditors[indexInArray].name+"</option>");
+            });
+          }else {
+            $("#frmstatusaction #action").empty();
+            $("#frmstatusaction #action").append(hrdata);
+            $("#frmstatusaction #action #hr").append("<option value=''>-- Select HR --</option>");
+            $.each(hrs, function (indexInArray, valueOfElement) { 
+                $("#frmstatusaction #action #hr").append("<option value="+hrs[indexInArray].id+">"+hrs[indexInArray].name+"</option>");
+            });
+          }
+        }
+    }
+
     function approve(id){
       if(confirm("Are you sure you want to Approve this Claim ? ")){
         let url = "../../../library/request.php?action=approve_claim";
@@ -559,6 +627,26 @@
             }
           });
       }
+    }
+
+    function hod_approve_claims(id){
+      $('#audithrstatusdialog').modal('show');
+      // if(confirm("Are you sure you want to Approve this Claim ? ")){
+      //   let url = "../../../library/request.php?action=hod_approve_claim";
+
+      //     $.ajax({
+      //       type: "POST",
+      //       url: url,
+      //       data: {"id":id},
+      //       dataType: "JSON",
+      //       success: function (response) {
+      //         if(response == 1){
+      //           alert("Claim Approved Successfully")
+      //           window.location = "hodapprove.php";
+      //         }
+      //       }
+      //     });
+      // }
     }
 
     $("form#frmreturn").submit(function (e) { 
@@ -600,9 +688,92 @@
         }
     });
 
+    $("form#frmstatusaction").submit(function (e) { 
+
+        var id = $("#claimid").val();      
+        var userid = $("#userid").val();      
+        var auditor = $("#auditor").val();      
+        var hr = $("#hr").val(); 
+        var selectedstatus = $("#status").val();      
+
+        var status = false;
+        var data = {};
+
+        if(selectedstatus == 'Audit'){
+          if(auditor == ""){
+            $("#auditerror").html("Audit Cannot be empty").addClass("text-danger");
+            status = true;
+          }else{
+            $("#auditerror").html("");
+
+            data = {
+              'id':id,
+              'Auditedby':auditor,
+              'hod': 0
+            }
+
+            if(confirm("Are you sure you want to Proceed claims?")){
+              let url = "../../../library/request.php?action=hod_sent_claims_to_auditor";
+
+                $.ajax({
+                  type: "POST",
+                  url: url,
+                  data: data,
+                  dataType: "JSON",
+                  success: function (response) {
+                    
+                      if(response == 1){
+                        alert("Claim Sent to Auditor");
+                        window.location = 'index.php';
+                      }else{
+                        alert("Unable to processed claim");
+                        window.location.reload();
+                      }
+                  }
+                });
+            }
+          }
+        }else if(selectedstatus == 'hr'){
+          if(hr == ""){
+            $("#hrerror").html("HR Cannot be empty").addClass("text-danger");
+            status = true;
+          }else{
+            $("#hrerror").html("");
+
+            data = {
+              'id':id,
+              'hrname':hr,
+              'hrrequired': 1,
+              'hod': 0
+            }
+
+            if(confirm("Are you sure you want to Proceed claims?")){
+              let url = "../../../library/request.php?action=hod_sent_claims_to_hr";
+
+                $.ajax({
+                  type: "POST",
+                  url: url,
+                  data: data,
+                  dataType: "JSON",
+                  success: function (response) {
+                    
+                      if(response == 1){
+                        alert("Claim Sent to HR");
+                        window.location = 'index.php';
+                      }else{
+                        alert("Unable to processed claim");
+                        window.location.reload();
+                      }
+                  }
+                });
+            }
+          }
+        }
+    });
+
     $("form#frmaudit").submit(function (e) { 
 
-        var claimid = $("#frmaudit #claimid").val();      
+        var claimid = $("#frmaudit #id").val();      
         var approvedby = $("#frmaudit #approvedby").val();      
         var userid = $("#frmaudit #userid").val();      
         var status = $("#frmaudit #status").val();   
@@ -686,6 +857,19 @@
       });
     }
 
+    function get_hrs(){
+      let url = "../../../library/request.php?action=gethr";
+
+      $.ajax({
+        type: "POST",
+        url: url,
+        dataType: "JSON",
+        success: function (response) {
+              hrs = response;
+        }
+      });
+    }
+
     function get_auditor(){
       let url = "../../../library/request.php?action=getauditor";
 
@@ -755,6 +939,7 @@
     $(document).ready(function () {
       get_auditor();
       get_approval();
+      get_hrs();
     });
     
     

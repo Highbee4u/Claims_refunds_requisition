@@ -77,6 +77,9 @@
                                                     <th>Auditor Status</th>
                                                     <th>MD Status</th>
                                                     <th>Paymt. Status</th>
+                                                    <?php  if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
+                                                    <th>Paymt. Proc. Status</th>
+                                                    <?php } ?>
                                                     <th>Paymt. Date</th>
                                                 
                                                 </tr>
@@ -124,18 +127,35 @@
                                                         <?php if($dt['requisitiontype'] == 2){ ?>
                                                             <?php if($dt['payment_status'] == 0){ ?>
                                                                 <?php if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
-                                                                    <button class="btn btn-xs btn-primary" onclick="update_payment_status('<?php echo $dt['reqnumber'] ?>')">Update</button>
+                                                                    <button class="btn btn-xs btn-primary" onclick="update_payment_status('<?php echo $dt['reqnumber'] ?>', '<?php echo isset($_SESSION['user']) ? $_SESSION['user'][0]['id'] : '' ; ?>')">Update</button>
                                                                 <?php } else { 
                                                                     echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                                 } ?> 
-                                                        <?php } else { ?>
-                                                            <span class="bg-success" style = "color: white"><?php echo 'Paid'; ?></span> 
-                                                        <?php } ?>
+                                                        <?php } else { 
+                                                            if(isset($dt['paidby']) && $dt['paidby'] != NULL){ 
+                                                                echo '<span class="bg-success" style = "color: white">Approved</span><br> By: '.$user->get_user_name_by_id($dt['paidby']);
+                                                            } else { 
+                                                            echo '<span class="bg-success" style = "color: white">Approved</span>';
+                                                            } 
+                                                        } ?>
                                                                 
                                                     <?php } else { 
                                                         echo '<span class="bg-success" style = "color: white">Approved</span>'; 
                                                         } ?>
                                                     </td>
+                                                    <?php if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
+                                                    <td>
+                                                    <?php if($dt['requisitiontype'] == 2){ ?>
+                                                        <?php if($dt['payment_process_status'] == 0){ ?>
+                                                            <button class="btn btn-xs btn-primary" onclick="update_payment_process_status('<?php echo $dt['reqnumber'] ?>')">Update</button>
+                                                        <?php } else { 
+                                                                echo 'Processed'; 
+                                                        } ?>
+                                                    <?php } else { 
+                                                        echo '<span class="bg-danger" style = "color: white">Not Applicable</span>';
+                                                     } ?>
+                                                    </td>
+                                                    <?php } ?>
                                                     <td>
                                                     <?php if($dt['requisitiontype'] == 2){ ?>
                                                         <?php if($dt['payment_date'] == "0000-00-00"){ 
@@ -378,13 +398,13 @@
   }
 
 
-  function update_payment_status(id){
+  function update_payment_status(id, userid){
       if(id.length != ""){
           if(confirm("Are you sure you have made payment!?\r\n this cannot be reversed")){
             $.ajax({
                 url: "../../library/request.php?action=updatepaymentstatus",
                 type: 'POST',
-                data: {"id":id},
+                data: {"id":id, "userid":userid},
                 dataType: 'JSON',
                 success:function(data){
                     if(data == 1){
@@ -392,6 +412,32 @@
                         window.location.reload();
                     }else{
                         alert("Unable to update status, try later");
+                    }
+                    
+                }, 
+                error: function(error){
+                    console.log(error);
+                }
+            })
+          }
+      }
+  }
+
+  
+  function update_payment_process_status(id){
+      if(id.length != ""){
+          if(confirm("Are you sure you have Processed this Payment payment!?\r\n this cannot be reversed")){
+            $.ajax({
+                url: "../../library/request.php?action=updatepaymentprocessstatus",
+                type: 'POST',
+                data: {"id":id},
+                dataType: 'JSON',
+                success:function(data){
+                    if(data == 1){
+                        alert("Payment Marked As Process");
+                        window.location.reload();
+                    }else{
+                        alert("Unable to mark");
                     }
                     
                 }, 

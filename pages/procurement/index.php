@@ -54,6 +54,7 @@
                                         <tbody>
                                             <?php 
                                             $data = $req->fetch_by_criterial(array("audited"=>0, "approved"=>0,  "awaiting_price"=> 1, "approvalRequest"=>1));
+
                                             if(count($data) > 0) {   
                                             foreach($data as $dt){
                                             ?>

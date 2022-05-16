@@ -175,7 +175,7 @@ class Refund {
 
         $cleaneddata = $this->sanitize($data);        
 
-        $query = "UPDATE `$this->table` SET `approval`='1', `audited`='1', `approvedby`='".$cleaneddata['userid']."',`auditedby`='".$cleaneddata['userid']."', `approveddate` = '".date('Y-m-d')."' WHERE id ='".$cleaneddata['id']."'";
+        $query = "UPDATE `$this->table` SET `approval`='1', `audited`='1', `approvedby`='".$cleaneddata['userid']."',`auditedby`='".$cleaneddata['userid']."', `approveddate` = '".date('Y-m-d h:i:s', time())."' WHERE id ='".$cleaneddata['id']."'";
 
         // return $query;
         $result = $con->query($query);
@@ -219,24 +219,38 @@ class Refund {
         return $result ? 1 : 0;
     }
 
-    public function updatepaymentstatus($refundid){
+    public function updatepaymentstatus($data){
         $con = connection::getConnection();
 
-        $id = implode(',',$refundid);       
+        $cleaneddata = $this->sanitize($data);      
 
-        $query = "UPDATE `$this->table` SET `accountant_status`='1', `payment_date`='".date('Y-m-d h:i:s', time())."' WHERE id ='".$id."'";
+        $query = "UPDATE `$this->table` SET `accountant_status`='1', `payment_process_status`='1', `payment_date`='".date('Y-m-d h:i:s', time())."', `paidby` = '".$cleaneddata['userid']."' WHERE id ='".$cleaneddata['id']."'";
 
         $result = $con->query($query);
 
         return $result ? 1 : 0;
     }
 
+    public function updatepaymentprocessstatus($refundid){
+
+        $con = connection::getConnection();
+
+        $id = implode(',', $refundid); 
+
+        $query = "UPDATE `$this->table` SET `payment_process_status`='1' WHERE id ='".$id."'";
+
+        $result = $con->query($query);
+
+        return $result ? 1 : 0;
+    }
+
+
     public function approve_refund($refundid){
         $con = connection::getConnection();
 
         $id = implode(',', $refundid);
 
-        $query = "UPDATE `$this->table` SET `approval` = 1, `approveddate` = '".date('Y-m-d')."'  WHERE id='$id'";
+        $query = "UPDATE `$this->table` SET `approval` = 1, `approveddate` = '".date('Y-m-d h:i:s', time())."'  WHERE id='$id'";
         
         $result = $con->query($query);
 
@@ -248,7 +262,7 @@ class Refund {
 
         $cleaneddata = $this->sanitize($data);
 
-        $query = "UPDATE `$this->table` SET `comment` = '".$cleaneddata['description']."', `audited` = 0, `Approval` = 0, `approvalRequest` = 1, `returned` = 1 WHERE id='".$cleaneddata['id']."'";
+        $query = "UPDATE $this->table SET `comment` = '".$cleaneddata['description']."', `audited` = 0, `Approval` = 0, `approvalRequest` = 0, `returned` = 1, `returnedby` = '".$cleaneddata['userid']."', `returneddate` = '".date('Y-m-d h:i:s', time())."' WHERE id='".$cleaneddata['id']."'";
 
         $result = $con->query($query);
 

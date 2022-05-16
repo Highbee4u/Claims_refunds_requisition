@@ -96,7 +96,7 @@
                                                 <td><?php echo isset($dt['returned']) && $dt['returned'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span>" : '------'; ?></td>
                                                 <td>
                                                     <?php if(isset($dt['hodrequired']) && $dt['hodrequired'] == 1){
-                                                        echo isset($dt['is_hod']) && $dt['is_hod'] == 1 ? "<span class='bg-danger' style = 'color: white'>Pending</span>" : "<span class='bg-success' style = 'color: white'>Approved</span>"; 
+                                                        echo isset($dt['is_hod']) && $dt['is_hod'] == 1 ? "<span class='bg-danger' style = 'color: white'>Pending</span>" : "<span class='bg-success' style = 'color: white'>Approved</span><br>".$dt['hodapproveddate'];  
                                                     }else{
                                                         echo "<span class='bg-danger' style = 'color: white'>Not Applicable</span>";
                                                     }
@@ -109,7 +109,7 @@
                                                             if($dt['audited'] == 0 ){ 
                                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                             } else { 
-                                                                echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                                                echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['auditeddate']; 
                                                             }
                                                         }
                                                      ?>
@@ -122,7 +122,7 @@
                                                             if($dt['approval'] == 0){ 
                                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                             } else if($dt['approval'] == 1 ){ 
-                                                            echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                                            echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['approveddate']; 
                                                             }
                                                         }
                                                      ?>
@@ -135,7 +135,11 @@
                                                             if($dt['accountant_status'] == 0){ 
                                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                             } else if($dt['accountant_status'] == 1 ){ 
-                                                                echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                                                if(isset($dt['paidby']) && $dt['paidby'] != NULL){ 
+                                                                    echo '<span class="bg-success" style = "color: white">Approved</span><br> By: '.$user->get_user_name_by_id($dt['paidby']);
+                                                                }else{
+                                                                    echo '<span class="bg-success" style = "color: white">Approved</span>';
+                                                                }
                                                             }
                                                         }
                                                      ?>

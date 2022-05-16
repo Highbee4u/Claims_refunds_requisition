@@ -42,6 +42,7 @@
         $('#zero_config').DataTable();
 
         $(document).ready(function() {
+            
             function audit(id){
                 let url = '../../library/request.php?action=audit';
 

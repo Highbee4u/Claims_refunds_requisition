@@ -83,6 +83,9 @@
                                                 <th>Auditor Status</th>
                                                 <th>MD Status</th>
                                                 <th>Paymt. Status</th>
+                                                <?php  if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
+                                                <th>Paymt. Proc. Status</th>
+                                                <?php } ?>
                                                 <th>Paymt. Date</th>
                                             </tr>
                                         </thead>
@@ -109,35 +112,50 @@
                                                 <td><?php echo isset($dt['account_name']) && $dt['account_name'] !="" ? $dt['account_name'] : "--------------"; ?></td>
                                                 <td><?php echo isset($dt['account_number']) && $dt['account_number'] !="" ? $dt['account_number'] : "--------------"; ?></td>
                                                 <td><?php echo isset($dt['amount']) && $dt['amount'] !="" ? $dt['amount'] : "--------------"; ?></td>
-                                                <td><?php echo isset($dt['is_hod']) && $dt['is_hod'] == 1 ? "<span class='bg-danger'>Pending</span>" : "<span class='bg-success'>Approved</span>"; ?></td>
+                                                <td><?php echo isset($dt['is_hod']) && $dt['is_hod'] == 1 ? "<span class='bg-danger'>Pending</span>" : "<span class='bg-success'>Approved</span><br>".$dt['hodapproveddate']; ?></td>
                                                 <td><?php if($dt['audited'] == 0 ){ 
                                                             echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                     } else { 
-                                                    echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                                    echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['auditeddate'];
                                                     } ?>
                                                 </td>
                                                 <td><?php if($dt['approval'] == 0){ 
                                                             echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                     } else if($dt['approval'] == 1 ){ 
-                                                    echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                                    echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['approveddate']; 
                                                     } ?>
                                                 </td>
-                                                <td><?php if($dt['accountant_status'] == 0){ ?>
+                                                <td>
+                                                    <?php if($dt['accountant_status'] == 0){ ?>
                                                                <?php if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
-                                                                    <button class="btn btn-xs btn-primary" onclick="update_payment_status('<?php echo $dt['id'] ?>')">Update</button>
+                                                                    <button class="btn btn-xs btn-primary" onclick="update_payment_status('<?php echo $dt['id'] ?>', '<?php echo isset($_SESSION['user']) ? $_SESSION['user'][0]['id'] : '' ; ?>')">Update</button>
                                                                <?php } else { 
                                                                     echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                                 } ?> 
                                                     <?php } else if($dt['accountant_status'] == 1 ){ 
-                                                        echo '<span class="bg-success" style = "color: white">Paid</span>'; 
-                                                        } ?>
-                                                    </td>
-                                                    <td><?php if($dt['payment_date'] == "0000-00-00" || $dt['payment_date'] == NULL){ 
-                                                                echo ' -------- '; 
-                                                        } else if($dt['payment_date'] != "0000-00-00" ){ 
-                                                                echo $dt['payment_date']; 
-                                                        } ?>
-                                                    </td>
+                                                        if(isset($dt['paidby']) && $dt['paidby'] != NULL){
+                                                            echo '<span class="bg-success" style = "color: white">Paid</span><br> By: '.$user->get_user_name_by_id($dt['paidby']);
+                                                        }else{
+                                                            echo '<span class="bg-success" style = "color: white">Paid</span>';
+                                                        }   
+                                                    } ?>
+                                                </td>
+                                                <?php if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
+                                                <td>
+                                                    <?php if($dt['payment_process_status'] == 0){ ?>
+                                                        <button class="btn btn-xs btn-primary" onclick="update_payment_process_status('<?php echo $dt['id'] ?>')">Update</button>
+                                                    <?php } else { 
+                                                            echo 'Processed'; 
+                                                    } ?>
+                                                </td>
+                                                <?php } ?>
+                                                <td><?php if($dt['payment_date'] == "0000-00-00" || $dt['payment_date'] == NULL){ 
+                                                            echo ' -------- '; 
+                                                    } else if($dt['payment_date'] != "0000-00-00" ){ 
+                                                            echo $dt['payment_date']; 
+                                                    } ?>
+                                                </td>
+                                               
                                                 </tr>
                                             <?php } } else { ?>
                                                 <tr>
@@ -218,7 +236,7 @@
   let Auditors;
   let Approvals;
 
-  let base_url = "http://localhost/requisitionclaims/claims/pages/refund/history.php";
+  let base_url = "http://localhost/request/claims/pages/refund/history.php";
 
   function get_auditor(){
 
@@ -344,17 +362,42 @@
     
   });
   
-  function update_payment_status(id){
+  function update_payment_status(id, userid){
       if(id.length != ""){
           if(confirm("Are you sure you have made payment!?\r\n this cannot be Reverse")){
             $.ajax({
                 url: "../../../library/request.php?action=updaterefundpaymentstatus",
                 type: 'POST',
-                data: {"id":id},
+                data: {"id":id, "userid":userid},
                 dataType: 'JSON',
                 success:function(data){
                     if(data == 1){
                         alert("Payment Status Updated Successfully");
+                        window.location.reload();
+                    }else{
+                        alert("Unable to update status, try later");
+                    }
+                    
+                }, 
+                error: function(error){
+                    console.log(error);
+                }
+            })
+          }
+      }
+  }
+
+  function update_payment_process_status(id){
+      if(id.length != ""){
+          if(confirm("Are you sure you have Processed this payment!?\r\n this cannot be Reverse")){
+            $.ajax({
+                url: "../../../library/request.php?action=updaterefundpaymentprocessstatus",
+                type: 'POST',
+                data: {"id":id},
+                dataType: 'JSON',
+                success:function(data){
+                    if(data == 1){
+                        alert("Payment Marked As Processed");
                         window.location.reload();
                     }else{
                         alert("Unable to update status, try later");
