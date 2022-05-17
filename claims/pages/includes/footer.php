@@ -44,7 +44,8 @@
         $('#zero_config').DataTable();
 
         $(document).ready(function() {
-            // $('.js-example-basic-single').select2();
+            $('.js-example-basic-single').select2();
+            
             function audit(id){
                 let url = '../../library/request.php?action=audit';
 

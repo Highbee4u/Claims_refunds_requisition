@@ -10,7 +10,7 @@ UPDATE `requisition_header` SET `procapproveddate` = reqdate  WHERE `approved` =
 
 ALTER TABLE `requisition_header` ADD `returnedby` INT NULL AFTER `return`;
 
-ALTER TABLE `refunds_header` ADD `returneddate` DATETIME NULL AFTER `hodrequired`,  ADD `auditeddate` DATETIME NULL AFTER `auditeddate`, ADD `hodapproveddate` DATETIME NULL AFTER `auditeddate`;
+ALTER TABLE `refunds_header` ADD `returneddate` DATETIME NULL AFTER `hodrequired`,  ADD `auditeddate` DATETIME NULL, ADD `hodapproveddate` DATETIME NULL AFTER `auditeddate`;
 
 ALTER TABLE `refunds_header` ADD `bccapproveddate` DATETIME NULL AFTER `hodapproveddate`;
 
@@ -26,7 +26,7 @@ ALTER TABLE `refunds_header` ADD `returnedby` INT NULL AFTER `returned`;
 
 ALTER TABLE `requisition_header` ADD `paidby` INT NULL AFTER `returneddate`;
 
-ALTER TABLE `claims_header` ADD `hodname` INT NULL AFTER `hod`;
+ALTER TABLE `claims_header` ADD `hodname` INT NULL;
 
 
 ALTER TABLE `refunds_header` ADD `paidby` INT NULL AFTER `bccapproveddate`;

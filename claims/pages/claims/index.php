@@ -174,7 +174,7 @@
             <!-- ============================================================== -->
 
               <!-- Modal -->
-    <div class="modal fade" id="addclaims" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal fade" id="addclaims" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -225,8 +225,10 @@
                 </div>
 
                 <label for="lblstaffname" id="lblclaimscat">Claims Category Name:</label>
+                <div class="form-control">
                 <select name="claimscategory" id="claimscategory" class="form-control js-example-basic-single" ></select>
                 <span id="claimscategoryerror"></span>
+                </div>
             </div>
             
           </div>
@@ -345,6 +347,7 @@
 
         $("#addclaims #divauditor").hide();
         $("#addclaims #divhr").hide();
+
 
       $("#addclaims").modal('show');
   }

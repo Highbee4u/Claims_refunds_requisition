@@ -78,27 +78,7 @@ require '../../../model/User.php'; ?>
                                 </ul>
                             </li>
                         <?php } ?>
-                            <?php if(isset($_SESSION['user']) && $user->is_admin($_SESSION['user'][0]['id'])){ ?>
-                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "./../../../pages/dashboard/admin.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Requisition</span></a></li>
-                            <?php } else if(isset($_SESSION['user']) && $user->canApprove($_SESSION['user'][0]['id'])) {?>
-                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "./../../../pages/dashboard/approval.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Requisition</span></a></li>
-                            <?php } else if(isset($_SESSION['user']) && $user->canAudit($_SESSION['user'][0]['id'])) {?>
-                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "./../../../pages/dashboard/auditor.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Requisition</span></a></li>
-                            <?php } else if(isset($_SESSION['user']) && $user->is_accountant($_SESSION['user'][0]['id'])) {?>
-                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "./../../../pages/dashboard/accountant.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Requisition</span></a></li>
-                            <?php } else if(isset($_SESSION['user']) && $user->is_hr($_SESSION['user'][0]['id'])) {?>
-                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "./../../../pages/dashboard/hr.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Requisition</span></a></li>
-                            <?php }  else if(isset($_SESSION['user']) && $user->is_hmo($_SESSION['user'][0]['id'])) {?>
-                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "./../../../pages/dashboard/hmo.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Requisition</span></a></li>
-                            <?php } else if(isset($_SESSION['user']) && $user->is_bcc($_SESSION['user'][0]['id'])) {?>
-                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "./../../../pages/dashboard/bcc.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Requisition</span></a></li>
-                            <?php } else if(isset($_SESSION['user']) && $user->is_hod($_SESSION['user'][0]['id'])) {?>
-                                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "./../../../pages/dashboard/hod.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Requisition</span></a></li>
-                            <?php } ?>
-                            
-                            <?php if(isset($_SESSION['user']) && $user->is_admin($_SESSION['user'][0]['id'])){ ?>
-
-                            <?php } ?>
+                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "./../../../pages/dashboard/admin.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Requisition</span></a></li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->

@@ -650,7 +650,7 @@
                     data: {"id":reqid, "userid":userid, "requisitiontype":rectype },
                     dataType: "JSON",
                     success: function (response) {
-                      if(response == 1){
+                      if(response.status == 1){
                         alert("Requisition Audited And Approved Successfully");
                         window.location = "audit.php";
                       }else{

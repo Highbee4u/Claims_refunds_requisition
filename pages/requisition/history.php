@@ -106,23 +106,23 @@
                                                     <td><?php echo $dt['reqdate']; ?></td>
                                                     <td><?php echo ($dt['coment'] == "" ? '----------' : $dt['coment']) ; ?></td>
                                                     <td><?php if($dt['awaiting_price'] == 1){ 
-                                                                echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
+                                                            echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                         } else if($dt['awaiting_price'] == 0 ){ 
-                                                        echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                                        echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['procapproveddate'];  
                                                         } ?>
                                                     </td>
                                                     <td><?php if($dt['audited'] == 0){ 
-                                                                echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
-                                                        } else if($dt['audited'] == 1 ){ 
-                                                        echo '<span class="bg-success" style = "color: white">Approved</span>'; 
-                                                        } ?>
-                                                    </td>
-                                                    <td><?php if($dt['approved'] == 0){ 
-                                                                echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
-                                                        } else if($dt['approved'] == 1 ){ 
-                                                        echo '<span class="bg-success" style = "color: white">Approved</span>'; 
-                                                        } ?>
-                                                    </td>
+                                                            echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
+                                                    } else if($dt['audited'] == 1 ){ 
+                                                    echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['auditeddate']; 
+                                                    } ?>
+                                                </td>
+                                                <td><?php if($dt['approved'] == 0){ 
+                                                            echo '<span class="bg-danger" style = "color: white">Pending</span>';
+                                                    } else if($dt['approved'] == 1 ){ 
+                                                    echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['approveddate'];
+                                                    } ?>
+                                                </td>
                                                     <td>
                                                         <?php if($dt['requisitiontype'] == 2){ ?>
                                                             <?php if($dt['payment_status'] == 0){ ?>

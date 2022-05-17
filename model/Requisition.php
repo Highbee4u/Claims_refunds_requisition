@@ -229,7 +229,7 @@ class Requisition {
 
         $cleaneddata = $this->sanitize($data);        
 
-        $query = "UPDATE `$this->table` SET `approved`='1', `audited`='1', `approvedby`='".$cleaneddata['userid']."',`auditedby`='".$cleaneddata['userid']."', `auditeddate` = '".date('Y-m-d h:i:s', time())."', , `approveddate` = '".date('Y-m-d h:i:s', time())."', `coment` = ''  WHERE reqnumber ='".$cleaneddata['id']."'";
+        $query = "UPDATE `$this->table` SET `approved`='1', `audited`='1', `approvedby`='".$cleaneddata['userid']."',`auditedby`='".$cleaneddata['userid']."', `auditeddate` = '".date('Y-m-d h:i:s', time())."', `approveddate` = '".date('Y-m-d h:i:s', time())."', `coment` = ''  WHERE reqnumber ='".$cleaneddata['id']."'";
 
         $result = $con->query($query);
 

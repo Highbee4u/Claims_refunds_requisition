@@ -379,6 +379,9 @@
                   <option value="Audit">Sent For Approval</option>
                 </select>
                 <span id="statuserror"></span>
+                <label for="exampleInputEmail1" id="lbltobeapproved">To be Auited By:</label>
+                <select name="approvedby" class="form-control" id="approvedby" required></select>
+                <span id="approvedbyerror"></span>
                 
             </div>
             

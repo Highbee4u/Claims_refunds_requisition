@@ -214,6 +214,10 @@
                   <option value="1">Auditor</option>
                   <option value="2">Approval</option>
                   <option value="3">Procurement</option>
+                  <option value="4">Accountant</option>
+                  <option value="5">HR</option>
+                  <option value="7">BCC</option>
+                  <option value="8">HOD</option>
                 </select>
                 <span id="euserroleerror"></span>
                 <label for="exampleInputEmail1">Department:</label>

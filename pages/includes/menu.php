@@ -50,25 +50,7 @@
                                 </ul>
                             </li>
                         <?php } ?>
-                        <?php if(isset($_SESSION['user']) && $user->is_admin($_SESSION['user'][0]['id'])){ ?>
                             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "../../claims/pages/dashboard/admin.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Refunds And Claims</span></a></li>
-                        <?php } else if(isset($_SESSION['user']) && $user->canApprove($_SESSION['user'][0]['id'])) {?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "../../claims/pages/dashboard/approval.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Refunds And Claims</span></a></li>
-                        <?php } else if(isset($_SESSION['user']) && $user->canAudit($_SESSION['user'][0]['id'])) {?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "../../claims/pages/dashboard/audit.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Refunds And Claims</span></a></li>
-                        <?php } else if(isset($_SESSION['user']) && $user->is_accountant($_SESSION['user'][0]['id'])) {?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "../../claims/pages/dashboard/accountant.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Refunds And Claims</span></a></li>
-                        <?php } else if(isset($_SESSION['user']) && $user->is_hr($_SESSION['user'][0]['id'])) {?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "../../claims/pages/dashboard/hr.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Refunds And Claims</span></a></li>
-                        <?php } else if(isset($_SESSION['user']) && $_SESSION['user'][0]['user_roleid'] == 0) {?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "../../claims/pages/dashboard/dashboard.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Refunds And Claims</span></a></li>
-                        <?php } else if(isset($_SESSION['user']) && $user->is_hmo($_SESSION['user'][0]['id'])) {?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "../../claims/pages/dashboard/hmo.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Refunds And Claims</span></a></li>
-                        <?php } else if(isset($_SESSION['user']) && $user->is_bcc($_SESSION['user'][0]['id'])) {?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "../../claims/pages/dashboard/bcc.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Refunds And Claims</span></a></li>
-                        <?php } else if(isset($_SESSION['user']) && $user->is_hod($_SESSION['user'][0]['id'])) {?>
-                            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo "../../claims/pages/dashboard/hod.php"; ?>" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Refunds And Claims</span></a></li>
-                        <?php } ?>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->
