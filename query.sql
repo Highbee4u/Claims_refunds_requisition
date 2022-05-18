@@ -61,6 +61,9 @@ UPDATE refunds_header SET `hodapproveddate` = approveddate WHERE approval = 1 AN
 
 ALTER TABLE `refunds_header` CHANGE `approveddate` `approveddate` DATETIME NULL DEFAULT NULL;
 
+ALTER TABLE `claims_header` ADD `returnedby` INT NULL AFTER `returned`;
+
+
 
 
 

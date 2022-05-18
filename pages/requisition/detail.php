@@ -189,7 +189,9 @@
             <div class="form-group">
               <input type="hidden" name="requisitionid" id="requisitionid" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
                 <label for="exampleInputEmail1">Item ID:</label>
-                <select name="itemid" class="form-control" id="itemid"></select>
+                <div class="form-control">
+                <select name="itemid" class="form-control js-example-basic-single" id="itemid"></select>
+                </div>
                 <span id="itemiderror"></span>
                 <label for="exampleInputEmail1">UOM:</label>
                 <input type="text" name="uom" readonly class="form-control" id="uom">

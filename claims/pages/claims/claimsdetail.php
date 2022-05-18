@@ -276,6 +276,7 @@
           <form id="frmreturn"  onsubmit="return false" method = "POST" >
             <div class="form-group">
               <input type="hidden" name="Claimid" id="Claimid" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
+              <input type="hidden" name="userid" id="userid" value="<?php echo isset($_SESSION['user']) ? $_SESSION['user'][0]['id'] : ''; ?>">
                 <label for="exampleInputEmail1">Enter Comment:</label>
                 <input type="text" name="description" class="form-control" id="description" >
                 <span id="descriptionerror"></span>
@@ -479,17 +480,16 @@
           var data = {'Amount': Amount, 'Description':Description, 'claim_id':claim_id, 'id': detailid }
           // console.log(data);
           $.ajax({
-              url: "../../../library/request.php?action=returnclaim",
+              url: "../../../library/request.php?action=update_claim_detail",
               type: 'POST',
               data: data,
               dataType: 'JSON',
               success:function(response){
-                console.log(response);
-                // if(data == 1){
-                //   window.location.reload();
-                // }else{
-                //   alert("Unable to make changes, try later");
-                // }
+                if(response == 1){
+                  window.location.reload();
+                }else{
+                  alert("Unable to make changes, try later");
+                }
                   
               }, 
               error: function(error){
@@ -655,7 +655,8 @@
     $("form#frmreturn").submit(function (e) { 
 
         var id = $("#Claimid").val();      
-        var comment = $("#description").val();      
+        var comment = $("#description").val();   
+        var userid = $("#userid").val();   
 
         var status = false;
 
@@ -673,7 +674,7 @@
               $.ajax({
                 type: "POST",
                 url: url,
-                data: { 'id':id, 'description':comment },
+                data: { 'id':id, 'description':comment, 'returnedby':userid },
                 dataType: "JSON",
                 success: function (response) {
                   

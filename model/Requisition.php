@@ -147,7 +147,7 @@ class Requisition {
     public function approve_requisition($data){
         $con = connection::getConnection();
 
-        $query = "UPDATE `$this->table` SET `approved` = 1, `coment` = '', `approveddate`= '".date('Y-m-d h:i:s', time())."'  WHERE reqnumber='".$data['id']."'";
+        $query = "UPDATE `$this->table` SET `approved` = 1, `coment` = '', `returnedby` = '', `return` = 0, `returneddate` = NULL,   `approveddate`= '".date('Y-m-d h:i:s', time())."'  WHERE reqnumber='".$data['id']."'";
         
         $result = $con->query($query);
 
@@ -285,7 +285,7 @@ class Requisition {
 
         $id = implode(',',$reqid);
 
-        $query = "UPDATE `$this->table` SET `approvalRequest` = '1', `awaiting_price` = '1', `return` = '0'  WHERE reqnumber='$id'";
+        $query = "UPDATE `$this->table` SET `approvalRequest` = '1', `awaiting_price` = '1', `return` = '0', `returnedby` = ''  WHERE reqnumber='$id'";
 
         // return $query;
         $result = $con->query($query);
@@ -299,7 +299,7 @@ class Requisition {
 
         $cleaneddata = $this->sanitize($data);
 
-        $query = "UPDATE `$this->table` SET `coment` = '".$cleaneddata['description']."', `audited` = 0, `approved` = 0, `awaiting_price` = 1, `approvalRequest`= 0, `returned` = 1, `returnedby` = '".$cleaneddata['userid']."', returneddate = '".date('Y-m-d h:i:s', time())."' WHERE `reqnumber`= '".$cleaneddata['requisitionid']."'";
+        $query = "UPDATE `$this->table` SET `coment` = '".$cleaneddata['description']."', `audited` = 0, `approved` = 0, `awaiting_price` = 1, `approvalRequest`= 1, `returned` = 1, `returnedby` = '".$cleaneddata['userid']."', returneddate = '".date('Y-m-d h:i:s', time())."' WHERE `reqnumber`= '".$cleaneddata['requisitionid']."'";
     
         $result = $con->query($query);
 

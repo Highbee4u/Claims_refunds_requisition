@@ -150,8 +150,6 @@ class Claim {
         $con = connection::getConnection();
 
         $sql = "UPDATE $this->detail SET 'Amount' = '".$cleaned_request['Amount']."', 'Description' = '".$cleaned_request['Description']."' WHERE id = '".$cleaned_request['id']."' AND claim_id = '".$cleaned_request['claim_id']."'";
-
-    return $sql;
         
         $result = $con->query($sql);
 
@@ -191,7 +189,7 @@ class Claim {
 
         $id = implode(',',$claimid);
 
-        $query = "UPDATE `$this->table`  SET `Approved` = '1', Approveddate = '".date('Y-m-d')."' WHERE id ='".$id."'";
+        $query = "UPDATE `$this->table`  SET `Approved` = '1', `Approveddate` = '".date('Y-m-d h:i:s', time())."', `returned` = 0, `returnedby` = '', `returneddate` = NULL WHERE id ='".$id."'";
 
          $result = $con->query($query);
 
@@ -316,7 +314,7 @@ class Claim {
 
         $cleaneddata = $this->sanitize($data);
 
-        $query = "UPDATE `$this->table` SET `comment` = '".$cleaneddata['description']."', `Audited` = 0, `Approved` = 0, `approvalRequest` = 0, `returned` = 1 WHERE id='".$cleaneddata['id']."'";
+        $query = "UPDATE `$this->table` SET `comment` = '".$cleaneddata['description']."', `Audited` = 0, `Approved` = 0, `approvalRequest` = 0, `returned` = 1, `returnedby` ='".$cleaneddata['returnedby']."', `returneddate` ='".date('Y-m-s h:i:s', time())."'  WHERE id='".$cleaneddata['id']."'";
         
         $result = $con->query($query);
 

@@ -245,11 +245,11 @@ if (isset($_REQUEST['action'])) {
             echo json_encode($res);
         break;
         case 'update_claim_detail':
-            // $res = $claim->update_claim_detail($data, 'claims_detail');
-            // if($data['claim_id'] != ""){
-            //     $result = $claim->update_header_total($data['claim_id']);
-            // }
-            echo json_encode($data);
+            $res = $claim->update_claim_detail($data, 'claims_detail');
+            if($data['claim_id'] != ""){
+                $result = $claim->update_header_total($data['claim_id']);
+            }
+            echo json_encode($result);
         break;
         case 'delete_claim_detail':
             $res = $claim->delete_claim_detail($data);

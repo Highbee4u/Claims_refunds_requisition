@@ -110,26 +110,28 @@
                                         <td>
                                             <?php if($dt['hrrequired'] == 1){ ?>
                                                 <?php if($dt['hrstatus'] == 1) {?>
-                                                    <span class="bg-success" style = "color: white">Approved</span>
+                                                    <span class="bg-success" style = "color: white">Approved</span><br><?php echo $dt['hrapproveddate']; ?>
                                                 <?php } else { ?>
                                                     <span class="bg-danger" style="color: white">Pending</span>
                                                 <?php } ?>
                                             <?php }  else { ?>
                                                 <span class="bg-danger" style ="color: white"">NOT Applicable</span>
-                                            <?php } ?></td>          
+                                            <?php } ?>          
+
+                                        </td>        
 
                                         <td>
-                                            <?php if($dt['Audited'] == 0 ){ 
-                                                    echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
+                                            <?php  if($dt['Audited'] == 0 ){ 
+                                                echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                             } else { 
-                                                echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                                echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['auditeddate']; 
                                             } ?>
                                         </td>
                                         <td>
-                                            <?php if($dt['Approved'] == 0){ 
+                                            <?php  if($dt['Approved'] == 0){ 
                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                             } else if($dt['Approved'] == 1 ){ 
-                                                echo '<span class="bg-success" style = "color: white">Approved</span>'; 
+                                            echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['Approveddate'];  
                                             } ?>
                                         </td>
                                        
@@ -142,7 +144,7 @@
                                                 } ?> 
                                                         
                                             <?php } else if($dt['Accounting_status'] == 1 ){ 
-                                                echo '<span class="bg-success" style = "color: white">Paid</span>'; 
+                                                echo '<span class="bg-success" style = "color: white">Paid</span><br>'.$dt['payment_date']; 
                                             } ?>
                                         </td>
                                             <?php if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
