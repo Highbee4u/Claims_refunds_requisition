@@ -73,8 +73,12 @@
                                       <tr>
                                           <td>Total Amount:</td>
                                           <td><?php echo isset($header['amount']) ? $header['amount'] : ""; ?></td>
-                                          <td>Paymen Status:</td>
+                                          <td>Payment Status:</td>
                                           <td><?php echo isset($header['accountant_status']) && $header['accountant_status'] == 1 ? 'Approved' : "Pending"; ?></td>
+                                      </tr>
+                                      <tr>
+                                          <td>Initiated Date:</td>
+                                          <td colspan="3"><?php echo isset($header['Created_date']) ? $header['Created_date'] : ""; ?></td>
                                       </tr>
                                       <?php if(isset($header['returned']) && $header['returned'] == 1){ ?>
                                         <tr>

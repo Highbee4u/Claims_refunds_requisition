@@ -90,9 +90,9 @@
                                                 <td><?php echo $dt['reqdate']; ?></td>
                                                 <td><?php echo isset($dt['return']) && $dt['return'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span><br>".$dt['returneddate'] : "--------------"; ?></td>
                                                 <td>
-                                                    <?php if($dt['returnedby'] == NULL){
+                                                    <?php if(empty($dt['returnedby'])){
                                                         echo '---------------'; 
-                                                    } else {
+                                                    } else{
                                                         echo "<span class='bg-danger' style = 'color: white'>".$user->get_user_name_by_id($dt['returnedby'])."</span>";
                                                     } ?>
                                                 </td>

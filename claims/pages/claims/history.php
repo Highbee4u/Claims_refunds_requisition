@@ -144,7 +144,7 @@
                                                 } ?> 
                                                         
                                             <?php } else if($dt['Accounting_status'] == 1 ){ 
-                                                echo '<span class="bg-success" style = "color: white">Paid</span><br>'.$dt['payment_date']; 
+                                                echo '<span class="bg-success" style = "color: white">Paid</span><br>'.(!empty($dt['paidby']) ? "By: " .$user->get_user_name_by_id($dt['paidby']) : ""); 
                                             } ?>
                                         </td>
                                             <?php if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>

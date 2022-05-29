@@ -56,6 +56,7 @@
                                                 <th>Category</th>
                                                 <th>Payee Name</th>
                                                 <th>Return Status</th>
+                                                <th>Returned By</th>
                                                 <th>Hr Status</th>
                                                 <th>Auditor Status</th>
                                                 <th>MD Status</th>
@@ -91,6 +92,7 @@
                                                 <td><?php echo isset($dt['claim_categoryid']) ? $claim->get_category_name_by_id($dt['claim_categoryid']) : ""; ?></td>
                                                 <td><?php echo isset($dt['Payee']) && $dt['Payee'] !="" ? $dt['Payee'] : "<span class='bg-danger' style = 'color: white'>Not Applicable</span>"; ?></td>
                                                 <td><?php echo isset($dt['returned']) && $dt['returned'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span><br>".$dt['returneddate']  : '---------'; ?></td>
+                                                <td><?php echo isset($dt['returnedby']) && $dt['returnedby'] != NULL ? $user->get_user_name_by_id($dt['returnedby'])  : '---------'; ?></td>
                                                 <td>
                                                     <?php if($dt['hrrequired'] == 1){ ?>
                                                         <?php if($dt['hrstatus'] == 1) {?>
