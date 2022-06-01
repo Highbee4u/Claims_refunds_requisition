@@ -108,7 +108,7 @@
                                                 <td>
                                                     <?php 
                                                         if($dt['returned'] == 1){
-                                                            echo '------------'; 
+                                                            echo '--------'; 
                                                         }else{
                                                             if($dt['Audited'] == 0 ){ 
                                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
@@ -122,7 +122,7 @@
                                                 <td>
                                                     <?php 
                                                         if($dt['returned'] == 1){
-                                                            echo '------------'; 
+                                                            echo '--------'; 
                                                         }else{
                                                             if($dt['Approved'] == 0){ 
                                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 

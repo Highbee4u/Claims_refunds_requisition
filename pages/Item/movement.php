@@ -90,7 +90,7 @@
             <!-- ============================================================== -->
 
           <!-- Modal -->
-    <div class="modal fade" id="createstock" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal fade" id="createstock"  role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -103,8 +103,11 @@
           <form id="frmcreatestock" onsubmit="return false">
             <div class="form-group">
             <label for="exampleInputEmail1">Item ID:</label>
-                <select name="itemid" class="form-control" id="itemid"></select>
+            <div class="form-control">
+            <select name="itemid" class="form-control itemtoadd" id="itemid" ></select>
                 <span id="itemiderror"></span>
+            </div>
+                
                 <label for="exampleInputEmail1">UOM:</label>
                 <input type="text" name="uom" class="form-control" id="uom">
                 <span id="uomerror"></span>
@@ -228,6 +231,8 @@ $('form#frmcreatestock').submit(function(){
 
 
 $(document).ready(function () {
+  
   get_item();
+  $('.itemtoadd').select2();
 });
 </script>

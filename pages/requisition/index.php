@@ -53,7 +53,7 @@
                                                 <th>Req. By</th>
                                                 <th>Department</th>
                                                 <th>Req. Date</th>
-                                                <th>Return Status</th>
+                                                <!-- <th>Return Status</th> -->
                                                 <th>Returned By</th>
                                                 <th>Procmnt Status</th>
                                                 <th>Auditor Status</th>
@@ -88,11 +88,14 @@
                                                 <td><?php echo isset($dt['reqby']) ? $user->get_user_name_by_email($dt['reqby']) : ""; ?></td>
                                                 <td><?php echo isset($dt['departmentid']) && $dt['departmentid'] !=0 ? $department->get_depart_name_by_id($dt['departmentid']) : ""; ?></td>
                                                 <td><?php echo $dt['reqdate']; ?></td>
-                                                <td><?php echo isset($dt['return']) && $dt['return'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span><br>".$dt['returneddate'] : "--------------"; ?></td>
+                                               
+                                               <!-- <td> <?php /* echo isset($dt['return']) && $dt['return'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span><br>".$dt['returneddate'] : "--------------"; */?></td> -->
+
+
                                                 <td>
-                                                    <?php if(empty($dt['returnedby'])){
+                                                    <?php if($dt['returnedby'] == NULL ||$dt['returnedby'] == 0){
                                                         echo '---------------'; 
-                                                    } else{
+                                                    } else {
                                                         echo "<span class='bg-danger' style = 'color: white'>".$user->get_user_name_by_id($dt['returnedby'])."</span>";
                                                     } ?>
                                                 </td>

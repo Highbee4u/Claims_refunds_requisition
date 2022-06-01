@@ -102,7 +102,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                <table class="table table-striped table-bordered">
+                                <table id="zero_config" class="table table-striped table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>S/N</th>
@@ -180,7 +180,9 @@
     <script src="../../assets/libs/flot/jquery.flot.crosshair.js"></script>
     <script src="../../assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
     <script src="../../dist/js/pages/chart/chart-page-init.js"></script>
-
+    <script src="../../assets/extra-libs/DataTables/datatables.min.js"></script>
+    
+    <script>$('#zero_config').DataTable();</script>
 </body>
 
 </html>

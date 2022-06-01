@@ -80,8 +80,7 @@
                                       <tr>
                                           <td>Total Amount:</td>
                                           <td><?php echo isset($header['amount']) ? $header['amount'] : ""; ?></td>
-                                          <td>Initiated Date:</td>
-                                          <td><?php echo isset($header['Created_date']) ? $header['Created_date'] : ""; ?></td>
+                                          
                                       </tr>
                                       <?php if(isset($header['returned']) && $header['returned'] == 1){ ?>
                                         <tr>

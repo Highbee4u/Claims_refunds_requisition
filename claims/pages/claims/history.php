@@ -75,6 +75,7 @@
                                                 <th>Staff. No</th>
                                                 <th>Category</th>
                                                 <th>Payee Name</th>
+                                                <th>Amount</th>
                                                 <th>HR Status</th>
                                                 <th>Auditor Status</th>
                                                 <th>MD Status</th>
@@ -84,7 +85,7 @@
                                                 <th>Paymt. Proc. Status</th>
                                                 <?php } ?>
                                                 <th>Paymt. Date</th>
-                                                <th>Date</th>
+                                                <th> Created Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -106,7 +107,9 @@
                                         <td><?php echo isset($dt['Enteredby']) ? $user->get_user_name_by_email($dt['Enteredby']) : ""; ?></td>
                                         <td><?php echo isset($dt['hospital_no']) && $dt['hospital_no'] != '0' ? $dt['hospital_no'] : "---"; ?></td>
                                         <td><?php echo isset($dt['claim_categoryid']) ? $claim->get_category_name_by_id($dt['claim_categoryid']) : ""; ?></td>
-                                        <td><?php echo isset($dt['Payee']) && $dt['Payee'] !="" ? $dt['Payee'] : "--------------"; ?></td>
+                                        <td><?php echo isset($dt['Payee']) && $dt['Payee'] !="" ? $dt['Payee'] : "------------"; ?></td>
+
+                                        <td><?php echo isset($dt['Amount']) && $dt['Amount'] !="" ? $dt['Amount'] : "--------------"; ?></td>
                                         <td>
                                             <?php if($dt['hrrequired'] == 1){ ?>
                                                 <?php if($dt['hrstatus'] == 1) {?>
@@ -134,6 +137,7 @@
                                             echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['Approveddate'];  
                                             } ?>
                                         </td>
+                                        
                                        
                                         <td>
                                             <?php if($dt['Accounting_status'] == 0){ ?>
@@ -144,9 +148,15 @@
                                                 } ?> 
                                                         
                                             <?php } else if($dt['Accounting_status'] == 1 ){ 
-                                                echo '<span class="bg-success" style = "color: white">Paid</span><br>'.(!empty($dt['paidby']) ? "By: " .$user->get_user_name_by_id($dt['paidby']) : ""); 
+                                                
+                                                if(isset($dt['paidby']) && $dt['paidby'] != NULL){
+                                                    echo '<span class="bg-success" style = "color: white">Paid</span><br> By: '.$user->get_user_name_by_id($dt['paidby']);
+                                                }else{
+                                                    echo '<span class="bg-success" style = "color: white">Paid</span>';
+                                                }     
                                             } ?>
                                         </td>
+
                                             <?php if($user->is_accountant($_SESSION['user'][0]['id'])) { ?>
                                                 <td>
                                                     <?php if($dt['payment_process_status'] == 0){ ?>

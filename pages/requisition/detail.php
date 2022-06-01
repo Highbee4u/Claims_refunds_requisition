@@ -175,7 +175,7 @@
             <!-- ============================================================== -->
 
             <!-- Modal -->
-     <div class="modal fade" id="adddetail" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+     <div class="modal fade" id="adddetail"  role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -190,7 +190,11 @@
               <input type="hidden" name="requisitionid" id="requisitionid" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
                 <label for="exampleInputEmail1">Item ID:</label>
                 <div class="form-control">
-                <select name="itemid" class="form-control js-example-basic-single" id="itemid"></select>
+                <select name="itemid"  id="itemid" class="form-control myitemid" >
+
+                </select>
+               
+
                 </div>
                 <span id="itemiderror"></span>
                 <label for="exampleInputEmail1">UOM:</label>
@@ -716,6 +720,7 @@
     $(document).ready(function () {
       item_list();
       get_approval();
+      $('.myitemid').select2();
     });
     
     

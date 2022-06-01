@@ -108,8 +108,8 @@
                                                         }else{
                                                             if($dt['audited'] == 0 ){ 
                                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
-                                                            } else { 
-                                                                echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['auditeddate']; 
+                                                            } else if($dt['audited'] == 1 ){ 
+                                                                echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['auditeddate'];
                                                             }
                                                         }
                                                      ?>
@@ -136,7 +136,7 @@
                                                                 echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                             } else if($dt['accountant_status'] == 1 ){ 
                                                                 if(isset($dt['paidby']) && $dt['paidby'] != NULL){ 
-                                                                    echo '<span class="bg-success" style = "color: white">Approved</span><br> By: '.$user->get_user_name_by_id($dt['paidby']);
+                                                                    echo '<span class="bg-success" style = "color: white">paid</span><br> By: '.$user->get_user_name_by_id($dt['paidby']);
                                                                 }else{
                                                                     echo '<span class="bg-success" style = "color: white">Approved</span>';
                                                                 }

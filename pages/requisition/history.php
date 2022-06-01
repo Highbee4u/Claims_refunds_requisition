@@ -133,9 +133,9 @@
                                                                 } ?> 
                                                         <?php } else { 
                                                             if(isset($dt['paidby']) && $dt['paidby'] != NULL){ 
-                                                                echo '<span class="bg-success" style = "color: white">Approved</span><br> By: '.$user->get_user_name_by_id($dt['paidby']);
+                                                                echo '<span class="bg-success" style = "color: white">Paid</span><br> By: '.$user->get_user_name_by_id($dt['paidby']);
                                                             } else { 
-                                                            echo '<span class="bg-success" style = "color: white">Approved</span>';
+                                                            echo '<span class="bg-success" style = "color: white">Paid</span>';
                                                             } 
                                                         } ?>
                                                                 

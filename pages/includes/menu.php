@@ -1,7 +1,8 @@
 <?php require_once '../../model/User.php'; ?>
 <!-- Left Sidebar - style you can find in sidebar.scss  -->
         <!-- ============================================================== -->
-        <aside class="left-sidebar" data-sidebarbg="skin5">
+        <!-- #27a9e3 -->
+        <aside class="left-sidebar"  data-sidebarbg="skin5">
             <!-- Sidebar scroll-->
             <div class="scroll-sidebar">
                 <!-- Sidebar navigation-->
