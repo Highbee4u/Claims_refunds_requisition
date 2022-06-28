@@ -54,12 +54,13 @@
             <td><?php echo isset($header['bank_name']) ? $header['bank_name'] : ""; ?></td>
             <td>Payment Status:</td>
             <td><?php echo isset($header['accountant_status']) && $header['accountant_status'] == 1 ? 'Approved' : "Pending"; ?></td>
-            </tr>
+        </tr>
 
         <tr>
             <td>Total Amount:</td>
             <td><?php echo isset($header['amount']) ? $header['amount'] : ""; ?></td>
-           
+            <td>Initiated Date:</td>
+            <td><?php echo isset($header['Created_date']) ? $header['Created_date'] : ""; ?></td>
         </tr>
       </table>
       <hr>

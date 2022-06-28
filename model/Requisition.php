@@ -355,6 +355,45 @@ class Requisition {
         return $result ? 1 : 0;
     }
 
+    public function requpload($postedval){
+
+        if(isset($postedval)){
+            $errors = array();
+            $file_name = $postedval['file']['name'];
+            $file_size = $postedval['file']['size'];
+            $file_tmp = $postedval['file']['tmp_name'];
+            $file_type = $postedval['file']['type'];
+            $file_ext = explode('.',$file_type);
+            $retextension = strtolower(end($file_ext));
+            $max_size = 5 * 1024 * 1024;
+
+            $allowedExtensions = array('jpeg','jpg','png');
+
+            if(!in_array($retextension, $allowedExtensions)){
+                $errors[] = "Extension not allowed, please choose a JPEG or PNG File";
+            }
+
+            if($file_size > $max_size){
+                $errors[] = "Image size is too large";
+            }
+
+            $target = REQ_UPLOAD.$file_name;
+
+            
+            $rootdirs = explode('/', $_SERVER['REQUEST_URI']);
+
+            $link = "localhost/".$rootdirs[1].'/Uploads/requisition/'.$file_name;
+
+            if(empty($errors) === true){
+                return move_uploaded_file($file_tmp, $target) ? array('status'=> 1, 'link' => $link) : array('status'=> 0, 'errors' => $errors);
+            }else{
+                return array('status' => 0, 'error' => $errors);
+            }
+
+        }
+
+    }
+
 
     public function test($val){
         return "<h1>".$val."</h1>";

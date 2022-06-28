@@ -4,6 +4,9 @@
     define('DB_PASSWORD', '');
     // define('DB_connection', 'requisitionclaims_db');
     define('DB_connection', 'requisitionapp');
+    // define('root')
+
+    define('REQ_UPLOAD', $_SERVER['DOCUMENT_ROOT'].'/claimsandreq/Uploads/requisition/');
    
 
 

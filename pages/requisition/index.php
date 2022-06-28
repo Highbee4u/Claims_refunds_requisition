@@ -53,11 +53,11 @@
                                                 <th>Req. By</th>
                                                 <th>Department</th>
                                                 <th>Req. Date</th>
-                                                <!-- <th>Return Status</th> -->
                                                 <th>Returned By</th>
                                                 <th>Procmnt Status</th>
                                                 <th>Auditor Status</th>
                                                 <th>MD Status</th>
+                                                <th>DESC</th>
                                                 <th>Approval Req.</th>
                                             </tr>
                                         </thead>
@@ -117,7 +117,7 @@
                                                     echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['approveddate'];
                                                     } ?>
                                                 </td>
-                                                
+                                                <td> <button type="submit" class="btn btn-success text-center btn-xs" onclick="ViewDetail('<?php echo $dt['reqnumber']; ?>')">view</button></td>
                                                 <td><?php echo ($dt['approvalRequest'] == 1 ? 'Yes' : 'No'); ?></td>
                                                 </tr>
                                             <?php } } else { ?>
@@ -188,6 +188,34 @@
             
           </div>
           </form>
+        </div>
+      </div>
+    </div>
+
+                <!-- view desc. modal -->
+    <div class="modal fade" id="viewdetail"  role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Requisition Description</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <input type="hidden" name="requisitionid" id="requisitionid" value="<?php echo isset($_GET['id']) ? $_GET['id'] : ''; ?>">
+                <label for="exampleInputEmail1">Date Requested:</label>
+                <input type="text" name="dateRequested" class="form-control" readonly id="dateRequested" >
+                <label for="exampleInputEmail1">Requisition Description:</label>
+                <textarea name="desc" id="desc" class="form-control"  readonly></textarea>
+            </div>
+            
+          </div>
+          <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            
+          </div>
         </div>
       </div>
     </div>
@@ -349,6 +377,32 @@
 
     
   });
+
+  function ViewDetail(id){
+    if(id.lenght == 0){
+        return false;
+    } else {
+      let url = "../../library/request.php?action=getrequisitionheader";
+
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: {"id":id},
+        dataType: "JSON",
+        success: function (response) {
+            if(response){
+                $("#viewdetail #dateRequested").empty();
+                $("#viewdetail #dateRequested").val(response[0].reqdate);
+                $("#viewdetail #desc").empty();
+                $("#viewdetail #desc").val(response[0].description);
+                $("#viewdetail").modal('show');
+            }
+        }
+      });
+    }
+
+    
+  }
   
 
   $(document).ready(function () {

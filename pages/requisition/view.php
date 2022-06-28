@@ -76,6 +76,20 @@
                                         </tr>
                                       <?php } ?>
                                     </table>
+                                    <?php if(isset($header['files']) && !empty($header['files'])){ ?>
+                                    <hr>
+                                    <h4>Attachments</h4></div><hr>
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                          <tr>
+                                              <th>S/N</th>
+                                              <th>Tittle</th>
+                                              <th>Action</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody id="myupload"></tbody>
+                                    </table>
+                                    <?php } ?>
                                     <hr>
                                     <h4>Item Details</h4></div><hr>
                                     <table class="table table-striped table-bordered">

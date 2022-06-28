@@ -51,7 +51,8 @@
                                             <tr>
                                                 <th>&nbsp;</th>
                                                 <th>Refund. No</th>
-                                                <th>Initiated. By</th>
+                                                <th>Initiated By</th>
+                                                <th>Initiated Date</th>
                                                 <th>Hospt. No</th>
                                                 <th>Patient Name</th>
                                                 <th>Account Name</th>
@@ -88,6 +89,7 @@
                                                 </td>
                                                 <td><?php echo $dt['id']; ?></td>
                                                 <td><?php echo isset($dt['enteredby']) ? $user->get_user_name_by_email($dt['enteredby']) : ""; ?></td>
+                                                <td><?php echo isset($dt['Created_date']) ? $dt['Created_date'] : ""; ?></td>
                                                 <td><?php echo isset($dt['hospital_no']) && $dt['hospital_no'] != '0' ? $dt['hospital_no'] : "---"; ?></td>
                                                 <td><?php echo $dt['patient_name']; ?></td>
                                                 <td><?php echo isset($dt['account_name']) && $dt['account_name'] !="" ? $dt['account_name'] : "--------------"; ?></td>

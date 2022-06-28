@@ -61,7 +61,7 @@
                                                 <th>Auditor Status</th>
                                                 <th>MD Status</th>
                                                 <th>Paymt. Status</th>
-                                                <th>Date</th>
+                                                <th>Initiated Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>

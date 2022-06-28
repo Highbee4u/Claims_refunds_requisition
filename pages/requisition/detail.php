@@ -70,6 +70,9 @@
                                           <td>Description:</td>
                                           <td colspan="3"><?php echo isset($header['description']) ? $header['description'] : ""; ?></td>
                                       </tr>
+                                      <tr>
+                                        <td colspan="4"><a class="btn btn-primary btn-xs" onclick="showupload()" style = 'color: white'><i class="fa fa-plus"></i> Add Attachment</a></td>
+                                      </tr>
                                       <?php if(isset($header['returned']) && $header['returned'] == 1){ ?>
                                         <tr>
                                           <td>Status:</td>
@@ -83,6 +86,20 @@
                                         </tr>
                                       <?php } ?>
                                     </table>
+                                    <?php // $res = 1; if($res == 1){ ?>
+                                    <hr>
+                                    <h4>Attachments <?php print_r($_SERVER['DOCUMENT_ROOT']) ?></h4></div><hr>
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                          <tr>
+                                              <th>S/N</th>
+                                              <th>Tittle</th>
+                                              <th>Action</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody id="myupload"></tbody>
+                                    </table>
+                                    <?php // } ?>
                                     <hr>
                                     <h4>Item Details</h4></div><hr>
                                     <table class="table table-striped table-bordered">
@@ -324,12 +341,102 @@
       </div>
     </div>
 
+    <!-- show upload modal-->
+    <div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-labelledby="viewclient" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Upload</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmupload"   enctype = "multipart/form-data">
+                    <div class="form-group">
+                        <label for="lbltitle">Image tittle</label>
+                        <input type="text" class="form-control" name="imgtitle" id="imgtitle">
+                        <span id="titleerror"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="lbltitle">choose file</label>
+                        <input class="form-control" type="file" name="imgupload"  id="imgupload">
+                    </div>
+                    <div id="error"></div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
+                        <button type="button" id="btn_upload" class="btn btn-primary"> Upload</button>
+                    </div>
+                </form>
+          </div>
+        </div>
+    </div>
+
 
 <?php  require '../includes/footer.php'; ?>
 <script>
 
     let itemlist;
     let Approvals;
+    let links = new Array();
+
+    function showupload(){
+        $('#upload_modal').modal("show");
+    }
+
+    btn_upload.onclick = ()=>{
+        var imgtitle = document.getElementById('imgtitle').value;
+        var imgname = document.getElementById('imgupload').files[0];
+
+        let formData = new FormData();
+
+        formData.append("file", imgname);
+        formData.append("title", imgtitle);
+
+        // console.log(formData);
+
+        if($('#imgtitle').val() == ""){
+          $("#titleerror").html("Image Tittle field Can't be empty").addClass("text-danger");
+        }else{
+            $.ajax({
+                // url:'include/test.php',
+                url:'../../library/request.php?action=requpload',
+                type:'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success:function(data){
+                    let datas = JSON.parse(data);
+                    if(data.status == 1){
+                      links.push(datas);
+                      bindUploads(links);
+                      $('#upload_modal').modal('hide');
+                    }else if(datas.status == 0){
+                      $.each(datas.error, function (i, elem) { 
+                        $('#upload_modal #error').append(datas.error[i]).addClass('text-danger');
+                        $('#upload_modal #error').append(', ');
+                      });
+                    }
+                    
+                },error: function(e){
+                    console.log(e);
+                },
+            });
+            
+            
+        }
+        // return false;
+    }
+
+    let bindUploads = (links) =>{
+        var i = 0;
+        let html = '';
+        for( link of links){
+            i++;
+            html += `<tr> <td>${i}</td> <td><a target="popup" href="${link}"  onclick="window.open('${link}', 'popup','width=600,height=600')" return false >View</a></td> <td><button onclick="removeImg('${link}')" class="btn btn-sm">remove</button></td> </tr>`
+        }
+        myupload.innerHTML = html;
+    }
 
     function get_modal(id){
       

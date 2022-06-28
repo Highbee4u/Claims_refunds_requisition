@@ -15,6 +15,8 @@ if (isset($_REQUEST['action'])) {
         
     
     $action = ($_REQUEST['action'] != "" ? $_REQUEST['action'] : "");
+    $myUpload = $_FILES;
+
 
     $data = isset($_POST) ? $_POST : "";
     
@@ -41,6 +43,14 @@ if (isset($_REQUEST['action'])) {
         break;
         case 'createrequisitionheader':
             $res = $req->create_requisition_header($data);
+            echo json_encode($res);
+        break;
+        case 'getrequisitionheader':
+            $res = $req->fetch_by_criterial(array('reqnumber'=>$data['id']));
+            echo json_encode($res);
+        break;
+        case 'requpload':
+            $res = $req->requpload($myUpload);
             echo json_encode($res);
         break;
         case 'approve':
