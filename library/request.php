@@ -10,6 +10,7 @@ require '../model/Department.php';
 require '../model/Itemmovement.php';
 require '../model/Claim.php';
 require '../model/Refund.php';
+require '../model/Upload.php';
 
 if (isset($_REQUEST['action'])) {
         
@@ -49,8 +50,16 @@ if (isset($_REQUEST['action'])) {
             $res = $req->fetch_by_criterial(array('reqnumber'=>$data['id']));
             echo json_encode($res);
         break;
-        case 'requpload':
-            $res = $req->requpload($myUpload);
+        case 'upload':
+            $res = $upload->upload_file($data, $myUpload);
+            echo json_encode($res);
+        break;
+        case 'getuploads':
+            $res = $upload->getuploads($data);
+            echo json_encode($res);
+        break;
+        case 'deleteupload':
+            $res = $upload->deleteuploads($data);
             echo json_encode($res);
         break;
         case 'approve':

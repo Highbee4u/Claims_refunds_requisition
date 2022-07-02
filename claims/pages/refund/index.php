@@ -59,6 +59,7 @@
                                                 <th>Account Number</th>
                                                 <th>Amount</th>
                                                 <th>Return Status</th>
+                                                <th>Uploads</th>
                                                 <th>HOD Status</th>
                                                 <th>Auditor Status</th>
                                                 <th>MD Status</th>
@@ -96,6 +97,7 @@
                                                 <td><?php echo isset($dt['account_number']) && $dt['account_number'] !="" ? $dt['account_number'] : "--------------"; ?></td>
                                                 <td><?php echo isset($dt['amount']) && $dt['amount'] !="" ? $dt['amount'] : "--------------"; ?></td>
                                                 <td><?php echo isset($dt['returned']) && $dt['returned'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span>" : '------'; ?></td>
+                                                <td> <a type="submit" class="btn btn-success text-center btn-xs" target="_blank" href="uploads.php?actionid=<?php echo $dt['id']; ?>&actiontype=2">Uploads</a></td>
                                                 <td>
                                                     <?php if(isset($dt['hodrequired']) && $dt['hodrequired'] == 1){
                                                         echo isset($dt['is_hod']) && $dt['is_hod'] == 1 ? "<span class='bg-danger' style = 'color: white'>Pending</span>" : "<span class='bg-success' style = 'color: white'>Approved</span><br>".$dt['hodapproveddate'];  

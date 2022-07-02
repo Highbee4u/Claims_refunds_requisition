@@ -58,6 +58,7 @@
                                                 <th>Auditor Status</th>
                                                 <th>MD Status</th>
                                                 <th>DESC</th>
+                                                <th>Uploads</th>
                                                 <th>Approval Req.</th>
                                             </tr>
                                         </thead>
@@ -118,6 +119,7 @@
                                                     } ?>
                                                 </td>
                                                 <td> <button type="submit" class="btn btn-success text-center btn-xs" onclick="ViewDetail('<?php echo $dt['reqnumber']; ?>')">view</button></td>
+                                                <td> <a type="submit" class="btn btn-success text-center btn-xs" target="_blank" href="uploads.php?actionid=<?php echo $dt['reqnumber']; ?>&actiontype=1">Uploads</a></td>
                                                 <td><?php echo ($dt['approvalRequest'] == 1 ? 'Yes' : 'No'); ?></td>
                                                 </tr>
                                             <?php } } else { ?>
@@ -220,10 +222,46 @@
       </div>
     </div>
 
+    <!-- show upload modal-->
+    <div class="modal fade" id="upload_modal" tabindex="-1" role="dialog" aria-labelledby="viewclient" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Upload</h5>
+              <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmupload"   enctype = "multipart/form-data">
+                    <input type="hidden" name="createdby" id="createdby" value="<?php echo isset($_SESSION['user']) ? $_SESSION['user'][0]['id'] : "" ; ?>">
+                    <input type="hidden" name="actiontype" id="actiontype" value="1"> <!-- action type 1 represent requisition -->
+                    <input type="hidden" name="actionid" id="actionid" value="1"> <!-- action id, primary key -->
+                    <div class="form-group">
+                        <label for="lbltitle">Image tittle</label>
+                        <input type="text" class="form-control" name="imgtitle" id="imgtitle">
+                        <span id="titleerror"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="lbltitle">choose file</label>
+                        <input class="form-control" type="file" name="imgupload"  id="imgupload">
+                    </div>
+                    <div id="error"></div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">No</button>
+                        <button type="button" id="btn_upload" class="btn btn-primary"> Upload</button>
+                    </div>
+                </form>
+          </div>
+        </div>
+    </div>
+
 <?php  require '../includes/footer.php'; ?>
 <script>
   let Auditors;
   let Approvals;
+
+  let links = new Array();
 
   function get_auditor(){
 
@@ -403,11 +441,85 @@
 
     
   }
-  
 
-  $(document).ready(function () {
-    // get_approval();
-    get_auditor();
-  });
+    // uploads start here
+    btn_upload.onclick = (actionid)=>{
+        var imgtitle = document.getElementById('imgtitle').value;
+        var createdby = document.getElementById('createdby').value;
+        var actiontype = document.getElementById('actiontype').value;
+        var imgname = document.getElementById('imgupload').files[0];
+        var actionid = document.getElementById('actionid').value;
+
+
+        let formData = new FormData();
+
+        formData.append("file", imgname);
+        formData.append("title", imgtitle);
+        formData.append("createdby", createdby);
+        formData.append("actiontype", actiontype);
+        formData.append("actionid", actionid);
+
+        // console.log(formData);
+
+        if($('#imgtitle').val() == ""){
+          $("#titleerror").html("Image Tittle field Can't be empty").addClass("text-danger");
+        }else{
+            $.ajax({
+                // url:'include/test.php',
+                url:'../../library/request.php?action=upload',
+                type:'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success:function(data){
+                    let datas = JSON.parse(data);
+                    if(datas.status == 1){
+                      links.push(datas);
+                    //   bindUploads(links);
+                      
+                    }else if(datas.status == 0){
+                      $.each(datas.error, function (i, elem) { 
+                        $('#upload_modal #error').empty();
+                        $('#upload_modal #error').append(datas.error[i]).addClass('text-danger');
+                        $('#upload_modal #error').append(', ');
+                      });
+                    }
+                    
+                },error: function(e){
+                    console.log(e);
+                },
+            });
+            
+            
+        }
+        // return false;
+    }
+  
+    let bindUploads = (links) =>{
+        var i = 0;
+        let html = '';
+        for( link of links){
+            i++;
+            html += `<tr> <td>${i}</td><td>${link.title}</td><td colspan="2"><a class="btn btn-xs btn-success" target="popup"  onclick="window.open('${link.link}', 'popup','width=600,height=600', 'noopener')" return false >View</a> | <button onclick="removeImg('${link.link}')" class="btn btn-xs btn-danger">remove</button></td> </tr>`
+        }
+        document.getElementById('myupload').innerHTML = html;
+        cleartextbox();
+    }
+
+    let removeImg = (elem) =>{
+        let elemIndex = links.findIndex(val => val == elem);
+        links.splice(elemIndex,1);
+        bindUploads(links);
+    }
+
+    function cleartextbox(){
+        $('#upload_modal #imgtitle').val('');
+        $('#upload_modal #imgupload').val('');
+    }
+
+    $(document).ready(function () {
+        // get_approval();
+        get_auditor();
+    });
 
 </script>
