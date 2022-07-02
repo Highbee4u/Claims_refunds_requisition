@@ -81,4 +81,38 @@
                 });
             }
         });
+
+        // function showupload(id, actiontype){
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "../../library/request.php?action=getuploads",
+        //         data: { 'actionid': id, 'actiontype': actiontype },
+        //         dataType: "JSON",
+        //         success: function (response) {
+
+        //             if(response){
+        //                 let html = '';
+        //                 var counter = 0;
+        //                 $.each(response, function (i, rec) { 
+        //                     counter++;
+        //                     html += `<tr> <td>${counter}</td><td>${rec.title}</td><td colspan="2"><a class="btn btn-xs btn-success" target="popup"  onclick="window.open('${rec.url}', 'popup','width=600,height=600', 'noopener')" return false >View</a> | <button onclick="removeImg('${rec.url}')" class="btn btn-xs btn-danger">remove</button></td> </tr>`
+        //                 });
+
+        //                 $('#upload_modal #myupload').empty();
+        //                 document.getElementById('myupload').innerHTML = html;
+        //                 cleartextbox();
+        //                 $('#upload_modal #actionid').empty();
+        //                 $('#upload_modal #actionid').val(id);
+        //                 $('#upload_modal').modal("show");
+        //             }
+                    
+        //         }
+        //     });
+            
+            
+        // }
+
+        // // function binduploaddata(data){
+
+        // // }
     </script>
