@@ -175,7 +175,7 @@ class Refund {
 
         $cleaneddata = $this->sanitize($data);        
 
-        $query = "UPDATE `$this->table` SET `approval`='1', `audited`='1', `approvedby`='".$cleaneddata['userid']."',`auditedby`='".$cleaneddata['userid']."', `approveddate` = '".date('Y-m-d h:i:s', time())."' WHERE id ='".$cleaneddata['id']."'";
+        $query = "UPDATE `$this->table` SET `approval`='1', `audited`='1', `approvedby`='".$cleaneddata['userid']."',`auditedby`='".$cleaneddata['userid']."', `approveddate` = '".date('Y-m-d h:i:s', time())."', `auditeddate` = '".date('Y-m-d h:i:s', time())."' WHERE id ='".$cleaneddata['id']."'";
 
         // return $query;
         $result = $con->query($query);
