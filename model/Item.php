@@ -178,7 +178,7 @@ class Item {
 
         }
 
-        $new_qty = ( empty($currentqty) ? 0 : $currentqty + empty($qty) ? 0 : $qty );
+        $new_qty =  empty($currentqty) ? 0 : $currentqty + ( empty($qty) ? 0 : $qty );
 
         $sql = "UPDATE ".$this->table. " SET qty = '$new_qty' WHERE itemid = '".$itemid."'";
         
