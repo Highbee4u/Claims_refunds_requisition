@@ -124,7 +124,7 @@ if (isset($_REQUEST['action'])) {
         break;
         case 'logout':
             session_destroy();
-            session_unset($_SESSION['user']);
+            session_unset();
             header("location: ../index.php");
         break;
         case 'getAllItem':

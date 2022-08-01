@@ -231,6 +231,8 @@ if(!class_exists('User')){
             return $count_row  == 1 ? true : false;
         }
 
+        
+
         public function is_bcc($userid){
             $con = connection::getConnection();
     
@@ -264,6 +266,21 @@ if(!class_exists('User')){
             $con = connection::getConnection();
     
             $sql = "SELECT * FROM $this->table WHERE  id = '".$userid."' AND user_roleid = '8'";
+        
+            $result = $con->query($sql);
+            $count_row = 0;
+        
+            if($result){
+                $count_row = $result->num_rows;
+            }
+        
+            return $count_row  == 1 ? true : false;
+        }
+
+        public function is_consultant($userid){
+            $con = connection::getConnection();
+    
+            $sql = "SELECT * FROM $this->table WHERE  id = '".$userid."' AND user_roleid = '9'";
         
             $result = $con->query($sql);
             $count_row = 0;
