@@ -208,7 +208,7 @@
 <?php  require '../includes/footer.php'; ?>
 <script>
 
-    let base_url = "http://localhost/requisitionclaims/claims/pages/claims/history.php";
+    let base_url = "http://localhost/request/claims/pages/claims/history.php";
 
     function myfilter(param){
             if(param.length != ""){

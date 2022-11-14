@@ -49,15 +49,12 @@
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;</th>
-                                                <th>Claim. No</th>
+                                                <th>Record. No</th>
                                                 <th>Initiated. By</th>
-                                                <th>Staff. No</th>
-                                                <th>Category</th>
-                                                <th>Payee Name</th>
-                                                <th>Uploads</th>
+                                                <th>Specialization</th>
+                                                <!-- <th>Uploads</th> -->
                                                 <th>Return Status</th>
                                                 <th>Returned By</th>
-                                                <th>Hr Status</th>
                                                 <th>Auditor Status</th>
                                                 <th>MD Status</th>
                                                 <th>Paymt. Status</th>
@@ -69,7 +66,7 @@
                                                 if($_SESSION['user'][0]['user_roleid'] == -1 || $_SESSION['user'][0]['user_roleid'] == 1 || $_SESSION['user'][0]['user_roleid'] == 2 || $_SESSION['user'][0]['user_roleid'] == 4 || $_SESSION['user'][0]['user_roleid'] == 5 || $_SESSION['user'][0]['user_roleid'] == 7 || $_SESSION['user'][0]['user_roleid'] == 8){
                                                     $data = $consultant->fetch_all();
                                                 }else{
-                                                    $data = $consultant->fetch_by_criterial(array('Enteredby'=>$_SESSION['user'][0]['email']), 'claims_header');
+                                                    $data = $consultant->fetch_by_criterial(array('Enteredby'=>$_SESSION['user'][0]['email']), 'consultings_header');
                                                 }
                                                 
                                                 if(count($data) > 0) {   
@@ -78,7 +75,7 @@
                                                 <tr>
                                                 <td>
                                                     <?php if($dt['approvalRequest'] == 0) { ?>
-                                                        <a href="claimsdetail.php?id=<?php echo $dt['id']; ?>"><i class='fa fa-edit'></i></a>
+                                                        <a href="detail.php?id=<?php echo $dt['id']; ?>"><i class='fa fa-edit'></i></a>
                                                         <a onclick ="delete_claims('<?php echo $dt['id']; ?>')"><i class='fa fa-trash'></i></a>
                                                     <?php } else{ ?>  
                                                         <a href="view.php?id=<?php echo $dt['id']; ?>"><i class="fa fa-eye"></i></i></a>
@@ -88,24 +85,10 @@
                                                 </td>
                                                 <td><?php echo $dt['id']; ?></td>
                                                 <td><?php echo isset($dt['Enteredby']) ? $user->get_user_name_by_email($dt['Enteredby']) : ""; ?></td>
-                                                <td><?php echo isset($dt['hospital_no']) && $dt['hospital_no'] != "" ? $dt['hospital_no'] : "<span class='bg-danger' style = 'color: white'>Not Applicable</span>"; ?></td>
-                                                <td><?php echo isset($dt['claim_categoryid']) ? $consultant->get_category_name_by_id($dt['claim_categoryid']) : ""; ?></td>
-                                                <td><?php echo isset($dt['Payee']) && $dt['Payee'] !="" ? $dt['Payee'] : "<span class='bg-danger' style = 'color: white'>Not Applicable</span>"; ?></td>
-                                                <td> <a type="submit" class="btn btn-success text-center btn-xs" target="_blank" href="uploads.php?actionid=<?php echo $dt['id']; ?>&actiontype=3">Uploads</a></td>
+                                                <td><?php echo isset($dt['consulttype']) ? $consultant->get_category_name_by_id($dt['consulttype']) : ""; ?></td>
+                                                <!-- <td> <a type="submit" class="btn btn-success text-center btn-xs" target="_blank" href="uploads.php?actionid=<?php // echo $dt['id']; ?>&actiontype=3">Uploads</a></td> -->
                                                 <td><?php echo isset($dt['returned']) && $dt['returned'] == 1 ? "<span class='bg-danger blink_text' style = 'color: white'>Returned</span><br>".$dt['returneddate']  : '---------'; ?></td>
                                                 <td><?php echo isset($dt['returnedby']) && $dt['returnedby'] != NULL ? $user->get_user_name_by_id($dt['returnedby'])  : '---------'; ?></td>
-                                                <td>
-                                                    <?php if($dt['hrrequired'] == 1){ ?>
-                                                        <?php if($dt['hrstatus'] == 1) {?>
-                                                            <span class="bg-success" style = "color: white">Approved</span><br><?php echo $dt['hrapproveddate']; ?>
-                                                        <?php } else { ?>
-                                                            <span class="bg-danger" style="color: white">Pending</span>
-                                                        <?php } ?>
-                                                    <?php }  else { ?>
-                                                        <span class="bg-danger" style ="color: white"">NOT Applicable</span>
-                                                    <?php } ?>          
-
-                                                </td>
                                                 <td>
                                                     <?php 
                                                         if($dt['returned'] == 1){
@@ -409,7 +392,7 @@
                 dataType: 'JSON',
                 success:function(data){
                     if(data.id != "" || data.id != "undefined")
-                    window.location = "claimsdetail.php?id="+data.id;
+                    window.location = "detail.php?id="+data.id;
                     else
                     alert("Unable to Create Claim, try lategr");
                 }, 

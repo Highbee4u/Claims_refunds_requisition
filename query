@@ -1,1 +1,1 @@
-CREATE TABLE `requisitionapp`.`uploads` ( `id` INT NOT NULL AUTO_INCREMENT , `actionid` VARCHAR(36) NOT NULL , `actiontype` INT NOT NULL , `title` VARCHAR(255) NOT NULL , `url` VARCHAR(255) NOT NULL , `created_date` TIMESTAMP NOT NULL , `createdby` VARCHAR(50) NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
+ALTER TABLE `users` ADD `category` INT NULL AFTER `departmentid`;

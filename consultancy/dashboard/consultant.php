@@ -4,20 +4,22 @@
 
 <?php require '../../model/Requisition.php'; ?>
 <?php require '../../model/Item.php'; ?>
-<?php // require_once '../../../model/User.php'; ?>
+<?php require '../../model/Consultant.php'; ?>
+
 
 <?php require '../includes/menu.php'; ?>
         <?php 
-  $users = $user->get_user_count();
-  $low_stock = $item->get_low_stock();
-  $reqtotal = $req->fetch_all();
-  $stock_count = $item->fetch_by_criterial(array('itemtypeid'=> 1));
+  $total_service_per_day = $consultant->get_total_service_per_day();
+
+  $total_patients = $consultant->total_patients();
+  $awaiting_approval = $consultant->fetch_by_criterial(array('Approved'=> 0), 'consultings_header');
+  $awaiting_auditing = $consultant->fetch_by_criterial(array('Audited'=> 0), 'consultings_header');
 
   $admin_data = array(
-    'awaiting_auditing' => $users,
-    'awaiting_approval' => $low_stock,
-    'requisition' => $reqtotal,
-    'stock_count' => $stock_count
+    'total_service' => number_format((float)$total_service_per_day['total'], 2, '.', ''),
+    'total_patients' => $total_patients,
+    'awaiting_approval' => $awaiting_approval,
+    'awaiting_auditing' => $awaiting_auditing
   );
   
 ?>
@@ -55,16 +57,16 @@
                 <!-- ============================================================== -->
                 <div class="row">
                     <!-- Column -->
-                    <div class="col-md-6 col-lg-4 col-xlg-4">
+                    <div class="col-md-6 col-lg-3 col-xlg-3">
                         <div class="card card-hover">
                             <div class="box bg-cyan text-center">
                                 <h1 class="font-light text-white"><i class="mdi mdi-view-dashboard"></i></h1>
-                                <h6 class="text-white"><?php  echo isset($admin_data['awaiting_auditing']) ? "(".$admin_data['awaiting_auditing'].")" : "(0)"; ?> Awaiting Auditing(s)</h6>
+                                <h6 class="text-white"><?php  echo isset($admin_data['awaiting_auditing']) ? "(".count($admin_data['awaiting_auditing']).")" : "(0)"; ?> Awaiting Auditing(s)</h6>
                             </div>
                         </div>
                     </div>
                     <!-- Column -->
-                    <div class="col-md-6 col-lg-4 col-xlg-4">
+                    <div class="col-md-6 col-lg-3 col-xlg-3">
                         <div class="card card-hover">
                             <div class="box bg-success text-center">
                                 <h1 class="font-light text-white"><i class="mdi mdi-chart-areaspline"></i></h1>
@@ -73,11 +75,20 @@
                         </div>
                     </div>
                      <!-- Column -->
-                    <div class="col-md-6 col-lg-4 col-xlg-4">
+                    <div class="col-md-6 col-lg-3 col-xlg-3">
                         <div class="card card-hover">
                             <div class="box bg-warning text-center">
                                 <h1 class="font-light text-white"><i class="mdi mdi-collage"></i></h1>
-                                <h6 class="text-white"><?php  echo isset($admin_data['total_service']) ? "(".count($admin_data['total_service']).") " : "(0) "; ?>Total Patient(s) Attend to</h6>
+                                <h6 class="text-white"><?php  echo isset($admin_data['total_patients']) ? "(".count($admin_data['total_patients']).") " : "(0) "; ?>Total Patient(s) Attend to</h6>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Column -->
+                    <div class="col-md-6 col-lg-3 col-xlg-3">
+                        <div class="card card-hover">
+                            <div class="box bg-warning text-center">
+                                <h1 class="font-light text-white"><i class="mdi mdi-collage"></i></h1>
+                                <h6 class="text-white"><?php  echo "(".$admin_data['total_service'].")"; ?>Total Amount / Day</h6>
                             </div>
                         </div>
                     </div>
