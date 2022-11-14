@@ -246,7 +246,7 @@
 <script>
   let Auditors;
   let Approvals;
-  let base_url = "http://localhost/request/pages/requisition/history.php";
+  let base_url = "http://192.168.2.15:7676/request/pages/requisition/history.php";
 
   function get_auditor(){
 

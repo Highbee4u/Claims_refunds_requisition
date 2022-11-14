@@ -96,14 +96,14 @@
                                         </thead>
                                         <tbody>
                                           <?php if(!empty($uploadsdata) && count($uploadsdata) > 0){ $i = 1; ?>
-                                            <?php for($j=0; $j <= count($uploadsdata) - 1;$j++){ ?>
+                                            <?php foreach($uploadsdata as $data){ ?>
                                               <tr>
                                                 <td><?php echo $i++ ?></td>
-                                                <td><?php echo isset($uploadsdata[$j]['title']) ? $uploadsdata[$j]['title'] : "-------"; ?></td>
-                                                <td><?php echo isset($uploadsdata[$j]['created_date']) ? $uploadsdata[$j]['created_date'] : "-------"; ?>
-                                                <td colspan="2"><a class="btn btn-xs btn-success" target="popup"  onclick="window.open('<?php echo ROOT.$uploadsdata[$j]['url'] ?>', 'popup','width=600,height=600', 'noopener')" return false >View</a> </td>
-                                                <?php if(isset($uploadsdata[$j]['createdby']) && $uploadsdata[$j]['createdby'] == $_SESSION['user'][0]['id']){ ?>
-                                                <td> <button  onclick="removeImg('<?php echo $uploadsdata[$j]['id'] ?>','<?php echo $uploadsdata[$j]['actiontype'] ?>','<?php echo $uploadsdata[$j]['url'] ?>')" class="btn btn-xs btn-danger">remove</button></td>
+                                                <td><?php echo isset($data['title']) ? $data['title'] : "-------"; ?></td>
+                                                <td><?php echo isset($data['created_date']) ? $data['created_date'] : "-------"; ?>
+                                                <td colspan="2"><a class="btn btn-xs btn-primary text-light" target="popup"  onclick="window.open('<?php echo ROOT.$data['url'] ?>', 'popup','width=600,height=600', 'noopener')" return false >View</a> </td>
+                                                <?php if(isset($data['createdby']) && $data['createdby'] == $_SESSION['user'][0]['id']){ ?>
+                                                <td> <button  onclick="removeImg('<?php echo $data['id'] ?>','<?php echo $data['actiontype'] ?>','<?php echo $data['url'] ?>')" class="btn btn-xs btn-danger">remove</button></td>
                                                 <?php } else { ?>
                                                   <td>&nbsp;</td>
                                                 <?php } ?>

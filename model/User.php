@@ -52,7 +52,7 @@ if(!class_exists('User')){
     
             */
     
-            $sql="SELECT id, name, email, user_roleid, login_attempt, departmentid, category FROM users WHERE email='$emailusername' AND password='$password'";
+            $sql="SELECT id, name, email, user_roleid, login_attempt, departmentid FROM users WHERE email='$emailusername' AND password='$password'";
     
     
             //checking if the username is available in the table
@@ -80,7 +80,7 @@ if(!class_exists('User')){
             
             $password = $this->myencrypt($cleaned_request['password']);
     
-            $sql = "INSERT INTO ".$this->table. "( name, email, password, user_roleid,  departmentid, category) VALUE ( '".$cleaned_request['name']."', '".$cleaned_request['email']."', '".$password."', '".$cleaned_request['user_roleid']."', '".$cleaned_request['department']."', '".$cleaned_request['category']."')";
+            $sql = "INSERT INTO ".$this->table. "( name, email, password, user_roleid,  departmentid) VALUE ( '".$cleaned_request['name']."', '".$cleaned_request['email']."', '".$password."', '".$cleaned_request['user_roleid']."', '".$cleaned_request['department']."')";
     
             $result = $con->query($sql);
     
@@ -231,8 +231,6 @@ if(!class_exists('User')){
             return $count_row  == 1 ? true : false;
         }
 
-        
-
         public function is_bcc($userid){
             $con = connection::getConnection();
     
@@ -266,21 +264,6 @@ if(!class_exists('User')){
             $con = connection::getConnection();
     
             $sql = "SELECT * FROM $this->table WHERE  id = '".$userid."' AND user_roleid = '8'";
-        
-            $result = $con->query($sql);
-            $count_row = 0;
-        
-            if($result){
-                $count_row = $result->num_rows;
-            }
-        
-            return $count_row  == 1 ? true : false;
-        }
-
-        public function is_consultant($userid){
-            $con = connection::getConnection();
-    
-            $sql = "SELECT * FROM $this->table WHERE  id = '".$userid."' AND user_roleid = '9'";
         
             $result = $con->query($sql);
             $count_row = 0;

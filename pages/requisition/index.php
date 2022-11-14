@@ -118,8 +118,8 @@
                                                     echo '<span class="bg-success" style = "color: white">Approved</span><br>'.$dt['approveddate'];
                                                     } ?>
                                                 </td>
-                                                <td> <button type="submit" class="btn btn-success text-center btn-xs" onclick="ViewDetail('<?php echo $dt['reqnumber']; ?>')">view</button></td>
-                                                <td> <a type="submit" class="btn btn-success text-center btn-xs" target="_blank" href="uploads.php?actionid=<?php echo $dt['reqnumber']; ?>&actiontype=1">Uploads</a></td>
+                                                <td> <button type="submit" class="btn btn-primary text-center btn-xs" onclick="ViewDetail('<?php echo $dt['reqnumber']; ?>')">view</button></td>
+                                                <td> <a type="submit" class="btn btn-primary text-center btn-xs" target="_blank" href="uploads.php?actionid=<?php echo $dt['reqnumber']; ?>&actiontype=1">Uploads</a></td>
                                                 <td><?php echo ($dt['approvalRequest'] == 1 ? 'Yes' : 'No'); ?></td>
                                                 </tr>
                                             <?php } } else { ?>

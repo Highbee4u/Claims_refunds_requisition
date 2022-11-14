@@ -63,6 +63,9 @@
             <tr>
             <td>Approved By:</td>
             <td> <?php echo isset($header['Approvedby']) && !empty($header['Approvedby']) ? $user->get_user_name_by_id($header['Approvedby']) : ""; ?></td>
+
+            <td>HOD Approval</td>
+            <td><?php echo isset($header['hodname']) ? $user->get_user_name_by_id($header['hodname']) : ""; ?></td>
             </tr>
             
             <?php if(isset($header['returned']) && $header['returned'] == 1){ ?>

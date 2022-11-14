@@ -50,6 +50,7 @@
                                             <th>Category</th>
                                             <th>Initiated. By</th>
                                             <th>Amount</th>
+                                            <th>HOD Approval</th>
                                             <th>Auditor Status</th>
                                             <th>MD Status</th>
                                             <th>Paymt. Status</th>
@@ -71,6 +72,7 @@
                                                 <td><?php echo isset($dt['claim_categoryid']) ? $claim->get_category_name_by_id($dt['claim_categoryid']) : ""; ?></td>
                                                 <td><?php echo isset($dt['Enteredby']) ? $user->get_user_name_by_email($dt['Enteredby']) : ""; ?></td>
                                                 <td><?php echo isset($dt['Amount']) && $dt['Amount'] !="" ? $dt['Amount'] : "--------------"; ?></td>
+                                                <td><?php echo isset($dt['hodname']) && !empty($dt['hodname'])  ? $user->get_user_name_by_id($dt['hodname']) : "--------------"; ?></td>
                                                 <td><?php if($dt['Audited'] == 0 ){ 
                                                             echo '<span class="bg-danger" style = "color: white">Pending</span>'; 
                                                     } else { 
