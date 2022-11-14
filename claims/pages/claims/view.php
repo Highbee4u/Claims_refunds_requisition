@@ -2,6 +2,7 @@
 <?php  require '../includes/header.php';   ?>
 <?php require '../../../model/Claim.php'; ?>
 <?php require '../../../model/Department.php'; ?>
+<?php require '../../../model/User.php'; ?>
 <?php require '../includes/menu.php'; ?>
 <?php $header = $claim->fetch_by_criterial(array('id'=>$_GET['id']), 'claims_header')[0]; ?>
 
@@ -88,6 +89,9 @@
                                       <tr>
                                           <td>Total Amount:</td>
                                           <td><?php echo isset($header['Amount']) ? "#".number_format($header['Amount'],2,'.',',')  : ""; ?></td>
+
+                                          <td>HOD Approval</td>
+                                        <td><?php echo isset($header['hodname']) ? $user->get_user_name_by_id($header['hodname']) : ""; ?></td>
                                          
                                       </tr>
                                       <tr>

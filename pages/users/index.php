@@ -157,7 +157,7 @@
                <input type="password" name="password" class="form-control" id="password">
                 <span id="passworderror"></span>
                 <label for="exampleInputEmail1">Userrole:</label>
-                <select name="userrole" onchange = "consultant_status(this.value)" class="form-control" id="userrole">
+                <select name="userrole" class="form-control" id="userrole">
                   <option value="">-- Select Role --</option>
                   <option value="-1">Super User</option>
                   <option value="0">User</option>
@@ -168,15 +168,8 @@
                   <option value="5">HR</option>
                   <option value="7">BCC</option>
                   <option value="8">HOD</option>
-                  <option value="9">Consultant</option>
                 </select>
                 <span id="userroleerror"></span>
-                <div id="cat">
-                <label for="exampleInputEmail1">Category:</label>
-                <select name="category" class="form-control" id="category"></select>
-                <span id="categoryerror"></span>
-                </div>
-                
                 <label for="exampleInputEmail1">Department:</label>
                 <select name="departmentid" class="form-control" id="departmentid"></select>
                 <span id="departmenterror"></span>
@@ -225,7 +218,6 @@
                   <option value="5">HR</option>
                   <option value="7">BCC</option>
                   <option value="8">HOD</option>
-                  <option value="9">Consultant</option>
                 </select>
                 <span id="euserroleerror"></span>
                 <label for="exampleInputEmail1">Department:</label>
@@ -278,7 +270,6 @@
 <?php  require '../includes/footer.php'; ?>
 <script>
   var department_list;
-  var consultCategory_list;
 
   function get_department_list(){
       $.ajax({
@@ -299,7 +290,6 @@
       $("#adduser #departmentid").append("<option value ='"+department_list[i].id+"'>"+ department_list[i].name+ "</option>");
     });
     
-    $("#adduser #cat").hide();
 
     $("#adduser").modal('show');
   }
@@ -336,9 +326,7 @@ $('form#frmadduser').submit(function(){
   let user_roleid = $("#userrole").val();
   let password = $("#password").val();
   let departmentid = $("#departmentid").val();
-  let category = $("#category").val();
 
-  console.log(category);
   var status = false;
 
    // validate item name
@@ -381,35 +369,15 @@ $('form#frmadduser').submit(function(){
   if(userrole == "" ) {
       $('#userroleerror').html('Userrole field cannot be blank').addClass('text-danger');
       status = true;
-  } else if(userrole == 9){
-    if(category == "" ) {
-      $('#categoryerror').html('Category field cannot be blank for Consultant').addClass('text-danger');
-      status = true;
-    } else{
-        $('#categoryerror').html(" ");
-    }
-  } else {
+  }
+  else{
       $('#userroleerror').html(" ");
   }
 
-  
-
 
   if(status == false){
-    
     let res = '';
-
-    let categorystatus = null;
-
-    if(user_roleid == 9){
-
-      categorystatus = category;
-
-    }
-    
-    var data = {'name': name, 'email':email, 'password':password, 'user_roleid':user_roleid, "department":departmentid, 'category': categorystatus  }
-
-    console.log(data);
+    var data = {'name': name, 'email':email, 'password':password, 'user_roleid':user_roleid, "department":departmentid }
 
     $.ajax({
 
@@ -421,7 +389,7 @@ $('form#frmadduser').submit(function(){
           let responses = JSON.parse(response);
           if(responses == true){
               alert("User created Successfully");
-              // window.location.reload();
+              window.location.reload();
           }else{
               alert("Error Creating User");
           }
@@ -583,39 +551,6 @@ function delete_user(id){
 
 $(document).ready(function () {
   get_department_list();
-  get_consult_list();
 });
-
-function consultant_status(usertype){
-  if(is_consultant(usertype)){
-
-    
-    $("#adduser #category").empty();
-    $("#adduser #category").append("<option value =''>Select Category...</option>");
-    $.each(consultCategory_list, function (i, val) { 
-      $("#adduser #category").append("<option value ='"+consultCategory_list[i].id+"'>"+ consultCategory_list[i].name+ "</option>");
-    });
-    
-    $("#adduser #cat").show();
-  }else{
-    $("#adduser #cat").hide();
-  }
-    
-}
-
-function is_consultant(selectedrole){
-    return selectedrole == 9 ? true : false;
-} 
-
-function get_consult_list(){
-    $.ajax({
-      type: "GET",
-      url: "../../library/request.php?action=getconsultcateorylist",
-      dataType: "JSON",
-      success: function (response) {
-        consultCategory_list = response;
-      }
-    });
-}
 
 </script>

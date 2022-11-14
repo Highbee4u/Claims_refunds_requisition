@@ -38,10 +38,10 @@ if(!class_exists('Upload')){
               $max_size = 5 * 1024 * 1024;
               
 
-              $allowedExtensions = array('jpeg','jpg','png');
+              $allowedExtensions = array('jpeg', 'jpg','png', 'pdf', 'doc', 'docx');
 
               if(!in_array($retextension, $allowedExtensions)){
-                  $errors[] = "Extension not allowed, please choose a JPEG or PNG File";
+                  $errors[] = "Extension not allowed, please choose a JPEG or PNG or PDF or DOC or DOCX File";
               }
 
               if($file_size > $max_size){
@@ -49,25 +49,30 @@ if(!class_exists('Upload')){
               }
 
               $actiontype = $data['actiontype'];
+            
 
               $date = date_create();
 
               switch($actiontype){
                 case '1': // requisition
                     $target = REQ_UPLOAD.$file_name.date_timestamp_get($date);
+                    $upload_subfolder = 'requisition/';
                 break;
                 case '2': // refunds
                     $target = REFUNDS_UPLOAD.$file_name.date_timestamp_get($date);
+                    $upload_subfolder = 'refund/';
                 break;
                 case '3': // claims
                     $target = CLAIMS_UPLOAD.$file_name.date_timestamp_get($date);
+                    $upload_subfolder = 'claim/';
                 break;
                 case '4': // consultant
                     $target = CONSULTANTS_UPLOAD.$file_name.date_timestamp_get($date);
+                    $upload_subfolder = 'consultant/';
                 break;
               }
               
-              $link = 'Uploads/requisition/'.$file_name.date_timestamp_get($date);
+              $link = 'Uploads/'.$upload_subfolder.$file_name.date_timestamp_get($date);
 
               if(empty($errors) === true){
 

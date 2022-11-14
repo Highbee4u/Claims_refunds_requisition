@@ -2,7 +2,7 @@
     define('DB_SERVER', 'localhost');
     define('DB_USERNAME', 'root');
     define('DB_PASSWORD', '');
-    // define('DB_connection', 'request_db');
+    // define('DB_connection', 'requisitionclaims_db');
     define('DB_connection', 'requisitionapp');
     // define('root')
 

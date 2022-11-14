@@ -182,8 +182,6 @@
                             window.location = 'pages/dashboard/bcc.php';
                           }else if(data.data[0].user_roleid == '8'){
                             window.location = 'pages/dashboard/hod.php';
-                          }else if(data.data[0].user_roleid == '9'){
-                            window.location = 'consultancy/dashboard/consultant.php';
                           }
                        }else{
                          alert(data.message);

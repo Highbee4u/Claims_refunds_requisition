@@ -104,7 +104,7 @@
                                                 <td><?php echo $i++ ?></td>
                                                 <td><?php echo isset($data['title']) ? $data['title'] : "-------"; ?></td>
                                                 <td><?php echo isset($data['created_date']) ? $data['created_date'] : "-------"; ?>
-                                                <td colspan="2"><a class="btn btn-xs btn-success" target="popup"  onclick="window.open('<?php echo ROOT.$data['url'] ?>', 'popup','width=600,height=600', 'noopener')" return false >View</a> </td>
+                                                <td colspan="2"><a class="btn btn-xs btn-primary text-light" target="popup"  onclick="window.open('<?php echo ROOT.$data['url'] ?>', 'popup','width=600,height=600', 'noopener')" return false >View</a> </td>
                                                 <?php if(isset($data['createdby']) && $data['createdby'] == $_SESSION['user'][0]['id']){ ?>
                                                 <td> <button  onclick="removeImg('<?php echo $data['id'] ?>','<?php echo $data['actiontype'] ?>','<?php echo $data['url'] ?>')" class="btn btn-xs btn-danger">remove</button></td>
                                                 <?php } else { ?>
