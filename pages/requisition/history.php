@@ -246,7 +246,7 @@
 <script>
   let Auditors;
   let Approvals;
-  let base_url = "http://localhost/requisitionclaims/pages/requisition/history.php";
+  let base_url = "http://localhost/request/pages/requisition/history.php";
 
   function get_auditor(){
 

@@ -11,6 +11,7 @@ require '../model/Itemmovement.php';
 require '../model/Claim.php';
 require '../model/Refund.php';
 require '../model/Upload.php';
+require '../model/Consultant.php';
 
 if (isset($_REQUEST['action'])) {
         
@@ -28,10 +29,6 @@ if (isset($_REQUEST['action'])) {
         break;
         case 'getauditor':
             $res = $user->fetch_by_criterial(array('user_roleid'=> 1));
-            echo json_encode($res);
-        break;
-        case 'gethr':
-            $res = $user->fetch_by_criterial(array('user_roleid'=> 5));
             echo json_encode($res);
         break;
         case 'getapproval':
@@ -245,7 +242,10 @@ if (isset($_REQUEST['action'])) {
             $res = $req->updatepaymentprocessstatus($data);
             echo json_encode($res);
         break;
-
+        case 'createcconsultingrecordheader':
+            $res = $consultant->create($data, 'consultings_header');
+            echo json_encode($res);
+        break;
         // claims
 
         case 'createclaimsheader':
@@ -363,6 +363,10 @@ if (isset($_REQUEST['action'])) {
             $res = $claim->fetch_all_category('claims_category');
             echo json_encode($res);
         break;
+        case 'getconsultcateorylist':
+            $res = $consultant->fetch_all_category('consult_category');
+            echo json_encode($res);
+        break;
         case 'createclaimscategory':
             $res = $claim->create($data, 'claims_category');
             echo json_encode($res);
@@ -417,6 +421,37 @@ if (isset($_REQUEST['action'])) {
         break;
         case 'refund_bcc_set_auditor':
             $res = $refund->bcc_set_auditor($data);
+            echo json_encode($res);
+        break;
+        case 'get_client_service_hod':
+            $res = $user->fetch_by_criterial(array('user_roleid'=> 8));
+            echo json_encode($res);
+        break;
+        case 'add_consult_detail':
+            $res = $consultant->create_consult_detail($data);
+            if($res['status'] == true){
+                $result = $consultant->update_header_total($data['consult_id']);
+
+                echo json_encode($result);
+            }
+        break;
+        case 'consult_approval_Request':
+            $res = $consultant->approval_request($data);
+            echo json_encode($res);
+        break;
+        case 'deleteconsultdetail':
+            $res = $consultant->delete_record_detail($data);
+            if($data['consult_id'] != ""){
+                $result = $consultant->update_header_total($data['consult_id']);
+                echo json_encode($result);
+            }
+        break;
+        case 'get_consult_detail_by_id':
+            $res = $consultant->fetch_detail_by_criterial(array('id'=> $data['id']));
+            echo json_encode($res);
+        break;
+        case 'update_consult_detail':
+            $res = $consultant->update_record_detail($data);
             echo json_encode($res);
         break;
         

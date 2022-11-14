@@ -52,7 +52,7 @@ if(!class_exists('User')){
     
             */
     
-            $sql="SELECT id, name, email, user_roleid, login_attempt, departmentid FROM users WHERE email='$emailusername' AND password='$password'";
+            $sql="SELECT id, name, email, user_roleid, login_attempt, departmentid, category FROM users WHERE email='$emailusername' AND password='$password'";
     
     
             //checking if the username is available in the table
@@ -80,7 +80,7 @@ if(!class_exists('User')){
             
             $password = $this->myencrypt($cleaned_request['password']);
     
-            $sql = "INSERT INTO ".$this->table. "( name, email, password, user_roleid,  departmentid) VALUE ( '".$cleaned_request['name']."', '".$cleaned_request['email']."', '".$password."', '".$cleaned_request['user_roleid']."', '".$cleaned_request['department']."')";
+            $sql = "INSERT INTO ".$this->table. "( name, email, password, user_roleid,  departmentid, category) VALUE ( '".$cleaned_request['name']."', '".$cleaned_request['email']."', '".$password."', '".$cleaned_request['user_roleid']."', '".$cleaned_request['department']."', '".$cleaned_request['category']."')";
     
             $result = $con->query($sql);
     

@@ -6,9 +6,9 @@ if(!file_exists("config.php")){
 
 class Consultant {
 
-    private $table = 'claims_header';
+    private $table = 'consultings_header';
 
-    private $detail = 'claims_detail';
+    private $detail = 'consultings_detail';
 
     public function myencrypt($str){
         return md5($str);
@@ -26,11 +26,38 @@ class Consultant {
         return $array;
     }
 
-    
+    public function is_exist($data){
+        
+        $con = connection::getConnection();
+
+        $sql = "SELECT * FROM ". $this->table ." WHERE Created_date='".date('Y-m-d')."' AND Enteredby='".$data['Enteredby']."'";
+
+        // return $sql;
+        $result = $con->query($sql);
+
+        if($result){
+            $count_row = $result->num_rows;
+        }
+
+        if($count_row == 1){
+            $row = $result->fetch_assoc();
+        }
+
+        return $count_row == 1 ? array('status' => true, 'id' => $row['id'])  : array('status' => false, 'id' => '');
+    }
 
     public function create($data, $table_name){
+        
         $cleaned_request = $this->sanitize($data);
         
+        $res = $this->is_exist($cleaned_request);
+
+        if($res['status'] == true){
+
+            return array("id"=>$res['id']);
+
+        }
+
         $con = connection::getConnection();
 
         $sql = "INSERT INTO ".$table_name. "(". implode(",", array_keys($cleaned_request)) .") VALUE ('" . implode("','", array_values($cleaned_request)). "')";
@@ -44,6 +71,23 @@ class Consultant {
 
         return $result ? $response : "";
 
+    }
+
+    public function create_consult_detail($data){
+        $con = connection::getConnection();
+
+        $cleaneddata = $this->sanitize($data);
+
+        $sql = "INSERT INTO $this->detail  ( consult_id, hospital_no, Patients_name, Amount, Description ) VALUES ('".$cleaneddata['consult_id']."','".$cleaneddata['hospital_no']."','".$cleaneddata['Patients_name']."','".$cleaneddata['Amount']."','".$cleaneddata['comment']."')";
+
+
+        $result = $con->query($sql);
+
+        $id = $con->insert_id;
+
+        return $result ? array("id"=>$id, 'status'=> true ) : array('status'=> false );
+
+        
     }
 
     public function fetch_all(){
@@ -90,6 +134,37 @@ class Consultant {
         return $data;
     }
 
+    public function fetch_detail_by_criterial($conditions = array()){
+        
+        $data = array();
+
+        $con = connection::getConnection();
+
+        $filter = '';
+        foreach($conditions as $col=>$colval){
+            $filter .= "`".$col."` = '".$colval."' AND";
+        }
+
+        $filters = substr($filter,0, -3);
+
+        $sql = 'SELECT * FROM '.$this->detail.' WHERE '.$filters;
+
+        $user_data = array();
+        $count_row = 0;
+
+        $result = $con->query($sql);
+        if($result){
+            $count_row = $result->num_rows;
+        }
+
+        if($count_row > 0){
+            while($row = $result->fetch_assoc()){
+                $user_data[] = $row;
+            }
+        }
+        return $user_data;
+    }
+
     public function fetch_by_criterial($conditions = array(), $table_name){
         
         $data = array();
@@ -121,17 +196,17 @@ class Consultant {
         return $user_data;
     }
 
-    public function delete_claims($claimid){
+    public function delete_records($recordid){
         
         $con = connection::getConnection();
 
-        $id = implode(',',$claimid);       
+        $id = implode(',',$recordid);       
 
         $query = "DELETE FROM `$this->table`  WHERE id='".$id."'";
 
         if($con->query($query)){
 
-            $qry = "DELETE FROM `$this->detail`  WHERE claim_id='".$id."'";
+            $qry = "DELETE FROM `$this->detail`  WHERE record_id='".$id."'";
 
             $result = $con->query($qry);
 
@@ -144,12 +219,13 @@ class Consultant {
         
     }
 
-    public function update_claim_detail($data){
+    public function update_record_detail($data){
         $cleaned_request = $this->sanitize($data);
 
         $con = connection::getConnection();
 
-        $sql = "UPDATE $this->detail SET 'Amount' = '".$cleaned_request['Amount']."', 'Description' = '".$cleaned_request['Description']."' WHERE id = '".$cleaned_request['id']."' AND claim_id = '".$cleaned_request['claim_id']."'";
+        $sql = "UPDATE ". $this->detail ." SET hospital_no = '".$cleaned_request['hospital_no']."',Patients_name = '".$cleaned_request['Patients_name']."', Amount = '".$cleaned_request['Amount']."', Description ='".$cleaned_request['comment']."' WHERE id = '".$cleaned_request['id']."' AND consult_id = '".$cleaned_request['consult_id']."'";
+        
         
         $result = $con->query($sql);
 
@@ -157,7 +233,7 @@ class Consultant {
 
     }
 
-    public function delete_claim_detail($data){
+    public function delete_record_detail($data){
         $con = connection::getConnection();
         
         $id = implode(',', $data);
@@ -171,12 +247,12 @@ class Consultant {
 
     }
 
-    public function approval_request($claimid){
+    public function approval_request($recordid){
         $con = connection::getConnection();
 
-        $id = implode(',',$claimid);
+        $id = implode(',',$recordid);
 
-        $query = "UPDATE `$this->table` SET `approvalRequest` = '1'  WHERE id='$id'";
+        $query = "UPDATE '$this->table` SET `approvalRequest` = '1'  WHERE id='$id'";
 
         // return $query;
         $result = $con->query($query);
@@ -184,10 +260,10 @@ class Consultant {
         return $result ? true : false;
     }
 
-    public function approval_claim($claimid){
+    public function approval_record($recordid){
         $con = connection::getConnection();
 
-        $id = implode(',',$claimid);
+        $id = implode(',',$recordid);
 
         $query = "UPDATE `$this->table`  SET `Approved` = '1', `Approveddate` = '".date('Y-m-d h:i:s', time())."', `returned` = 0, `returnedby` = '', `returneddate` = NULL WHERE id ='".$id."'";
 
@@ -196,7 +272,7 @@ class Consultant {
          return $result ? true : false;
     }
 
-    public function audit_approval_claim($data){
+    public function audit_approval_record($data){
         $con = connection::getConnection();
 
         $cleaneddata = $this->sanitize($data);        
@@ -234,11 +310,11 @@ class Consultant {
         return $result ? 1 : 0;
     }
 
-    public function updatepaymentprocessstatus($claimid){
+    public function updatepaymentprocessstatus($recordid){
 
         $con = connection::getConnection();
 
-        $id = implode(',', $claimid); 
+        $id = implode(',', $recordid); 
 
         $query = "UPDATE `$this->table` SET `payment_process_status`='1' WHERE id ='".$id."'";
 
@@ -247,24 +323,24 @@ class Consultant {
         return $result ? 1 : 0;
     }
 
-    public function delete_category($claimid){
+    public function delete_category($recordid){
         $con = connection::getConnection();
 
-        $id = implode(',',$claimid);       
+        $id = implode(',',$recordid);       
 
-        $query = "DELETE FROM claims_category  WHERE id ='".$id."'";
+        $query = "DELETE FROM records_category  WHERE id ='".$id."'";
 
         $result = $con->query($query);
 
         return $result ? 1 : 0;
     }
 
-    public function updateclaimscategory($data){
+    public function updaterecordscategory($data){
         $con = connection::getConnection();
 
         $cleaneddata = $this->sanitize($data);     
 
-        $query = "UPDATE claims_category SET `name`= '".$cleaneddata['name']."', `description`= '".$cleaneddata['description']."'   WHERE id ='".$cleaneddata['id']."'";
+        $query = "UPDATE records_category SET `name`= '".$cleaneddata['name']."', `description`= '".$cleaneddata['description']."'   WHERE id ='".$cleaneddata['id']."'";
 
         $result = $con->query($query);
 
@@ -275,7 +351,7 @@ class Consultant {
 
         $con = connection::getConnection();
 
-        $sql = "UPDATE ". $this->table. " SET Amount = ( SELECT SUM(IFNULL(Amount, 0)) FROM ".$this->detail." WHERE claim_id = '".$id."' ) WHERE id = '".$id."'";
+        $sql = "UPDATE ". $this->table. " SET Amount = ( SELECT SUM(IFNULL(Amount, 0)) FROM ".$this->detail." WHERE consult_id = '".$id."' ) WHERE id = '".$id."'";
 
         $result = $con->query($sql);
 
@@ -296,7 +372,7 @@ class Consultant {
         return $result ? 1 : 0;
     }
 
-    public function hr_approve_claim($data){
+    public function hr_approve_record($data){
         $con = connection::getConnection();
 
         $cleaneddata = $this->sanitize($data);   
@@ -309,7 +385,7 @@ class Consultant {
         return $result ? true : false;
     }
 
-    public function return_claim($data){
+    public function return_record($data){
         $con = connection::getConnection();
 
         $cleaneddata = $this->sanitize($data);
@@ -326,7 +402,7 @@ class Consultant {
 
         
         $con = connection::getConnection();
-        $query = "SELECT name FROM claims_category WHERE id ='".$id."'";
+        $query = "SELECT name FROM consult_category WHERE id ='".$id."'";
         
         $result = $con->query($query);
         if($result){
@@ -336,7 +412,7 @@ class Consultant {
         return $name;
     }
 
-    public function hod_sent_claims_to_hr($data){
+    public function hod_sent_records_to_hr($data){
         $con = connection::getConnection();
         
         $cleaneddata = $this->sanitize($data);
@@ -349,7 +425,7 @@ class Consultant {
         
     }
 
-    public function hod_sent_claims_to_auditor($data){
+    public function hod_sent_records_to_auditor($data){
         $con = connection::getConnection();
 
         $cleaneddata = $this->sanitize($data);
@@ -360,6 +436,32 @@ class Consultant {
 
         return $result ? 1 : 0;
 
+    }
+
+    public function get_total_service_per_day(){
+        $con = connection::getConnection();
+
+        $sql =  "SELECT SUM(IFNULL(Amount, 0)) as total FROM ".$this->detail." WHERE consult_id =(SELECT id FROM $this->table WHERE Created_date = CURRENT_DATE() GROUP BY Created_date)";
+
+        $result = $con->query($sql);
+
+        $total = $result->fetch_assoc();
+
+
+        return $total; 
+    }
+
+    public function total_patients(){
+        $con = connection::getConnection();
+
+        $sql =  "SELECT count(*) FROM ".$this->detail." WHERE consult_id =(SELECT id FROM $this->table WHERE Created_date = date('Y-m-d') GROUP BY Created_date)";
+
+        $result = $con->query($sql);
+
+        $totalpatient = $result->fetch_assoc();
+
+
+        return $totalpatient; 
     }
     
 }
